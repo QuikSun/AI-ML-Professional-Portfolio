@@ -21,8 +21,9 @@
     .card h4{font-size:1.08rem;margin:4px 0 13px;line-height:1.35}.card a{font-size:.93rem;font-weight:700}
     .future{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:20px}.future div{border:1px solid var(--line);background:white;border-radius:10px;padding:19px}.future strong{display:block;margin-bottom:5px}.future span{color:var(--muted);font-size:.9rem}
     .skills{display:flex;flex-wrap:wrap;gap:10px;padding:0;list-style:none}.skills li{background:#eaf0f5;border-radius:99px;padding:9px 15px;font-size:.92rem}
+    .intro-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:32px}.info-panel{border:1px solid var(--line);border-radius:12px;padding:25px;background:var(--bg)}.info-panel h3{font-size:1.08rem}.entry{border-left:3px solid #bad8e0;padding:0 0 4px 22px;margin:0 0 28px}.entry:last-child{margin-bottom:0}.entry h3{font-size:1.08rem;margin-bottom:4px}.entry .meta{font-size:.88rem;color:var(--muted);font-weight:650;margin-bottom:11px}.entry p{margin-bottom:0}.education-list{display:grid;gap:16px}.edu-entry{padding:20px 24px;border:1px solid var(--line);border-radius:11px;background:white}.edu-entry h3{font-size:1.08rem;margin-bottom:5px}.edu-entry p{margin:0;color:var(--muted)}
     footer{background:var(--navy);color:#dce7ef;padding:30px 0}footer a{color:var(--aqua)}
-    @media(max-width:660px){.hero{padding:65px 0 75px}.cards,.future{grid-template-columns:1fr}.workshop{padding:21px}.links{gap:13px}section{padding:55px 0}}
+    @media(max-width:660px){.hero{padding:65px 0 75px}.cards,.future,.intro-grid{grid-template-columns:1fr}.workshop{padding:21px}.links{gap:13px}section{padding:55px 0}}
   </style>
 </head>
 <body>
@@ -30,7 +31,7 @@
     <nav class="container nav" aria-label="Main navigation">
       <a href="#home" class="brand">Sunny | AI &amp; ML Portfolio</a>
       <div class="links">
-        <a href="#about">About</a><a href="#workshops">Workshops</a><a href="#skills">Skills</a>
+        <a href="#about">About</a><a href="#workshops">Workshops</a><a href="#experience">Experience</a><a href="#education">Education</a><a href="#skills">Skills</a>
         <a href="https://github.com/quiksun/AI-ML-Professional-Portfolio">GitHub</a>
       </div>
     </nav>
@@ -48,6 +49,16 @@
       <p>I am a market research and data analytics professional with experience in survey research, data analysis, KPI reporting, and business intelligence. My background includes working with large datasets, identifying operational trends, developing analytical reports, and supporting data-driven business decisions.</p>
       <p>My professional interests include applying artificial intelligence and machine learning to improve research operations, automate analytical workflows, and develop practical business solutions.</p>
       <p>This portfolio showcases selected coursework from AIML-500: Machine Learning Fundamentals and will grow as I complete additional workshops.</p>
+      <div class="intro-grid">
+        <div class="info-panel">
+          <h3>Personal Value Proposition</h3>
+          <p>I help research and operations teams turn complex data into clear insights, useful dashboards, and practical improvements. My experience combines market research, analytical reporting, and cross-functional coordination, allowing me to connect business questions with the data and processes needed to answer them. I am expanding this foundation through AI and machine learning studies, focusing on practical applications that support accurate analysis and informed human judgment.</p>
+        </div>
+        <div class="info-panel">
+          <h3>Target Audience</h3>
+          <p>This portfolio is intended for employers and collaborators in market research, business analytics, business intelligence, and operations. It also offers examples for students and professionals exploring how AI can support research, reporting, and everyday problem-solving.</p>
+        </div>
+      </div>
     </div></section>
     <section class="alt" id="workshops"><div class="container">
       <div class="section-intro"><div class="eyebrow">Portfolio</div>
@@ -69,6 +80,38 @@
         <div><strong>Workshop 4</strong><span>Workshop overview and selected artifacts coming soon.</span></div>
         <div><strong>Workshop 5</strong><span>Workshop overview and selected artifacts coming soon.</span></div>
         <div><strong>Workshop 6</strong><span>Workshop overview and selected artifacts coming soon.</span></div>
+      </div>
+    </div></section>
+    <section id="experience"><div class="container">
+      <div class="eyebrow">Professional Background</div><h2>Experience</h2>
+      <div class="entry">
+        <h3>Panel Data Analyst — Angus Reid Group</h3><div class="meta">March 2022–June 2026</div>
+        <p>Analyzed survey feasibility, panel performance, and operational KPIs to support research delivery and resource planning. Built Power BI dashboards and self-service reporting tools, and developed GPT-assisted workflows for selected feasibility and KPI reports. During an eight-month transition to an in-house platform, worked across research, operations, panel, and engineering teams to define data requirements and improve workflows.</p>
+      </div>
+      <div class="entry">
+        <h3>Probability Engineer / Data Analyst — International Gaming Systems</h3><div class="meta">April–December 2021</div>
+        <p>Used SQL and Tableau to analyze player behavior, campaign timing, segmentation, and conversion. Collaborated with developers to translate analytical findings and business requirements into campaign trigger logic.</p>
+      </div>
+      <div class="entry">
+        <h3>Research Executive — IFOP Asia</h3><div class="meta">October 2018–December 2019</div>
+        <p>Managed quantitative research projects involving survey design, fieldwork coordination, analysis, and client presentations. Supported consumer-brand research and coordinated Taiwan fieldwork for an international brand-awareness study.</p>
+      </div>
+      <div class="entry">
+        <h3>Data Collection Specialist — Amazon Lab126</h3><div class="meta">January–June 2018</div>
+        <p>Collected and validated voice datasets supporting early Alexa machine learning development, following documented data-quality and annotation protocols.</p>
+      </div>
+      <div class="entry">
+        <h3>Market Research Intern — KMK Consulting</h3><div class="meta">September–December 2017</div>
+        <p>Supported healthcare market research through survey planning, primary and secondary research, analysis, and preparation of client-facing findings.</p>
+      </div>
+    </div></section>
+    <section id="education" class="alt"><div class="container">
+      <div class="eyebrow">Academic Background</div><h2>Education</h2>
+      <div class="education-list">
+        <div class="edu-entry"><h3>Indiana Wesleyan University — Current Graduate Coursework</h3><p>Machine Learning Fundamentals (AIML-500), including generative AI, prompt evaluation, design thinking, and responsible AI applications.</p></div>
+        <div class="edu-entry"><h3>British Columbia Institute of Technology — Applied Data Analytics</h3><p>Expected completion: March 2027.</p></div>
+        <div class="edu-entry"><h3>Michigan State University — Master of Science in Marketing Research</h3><p>Completed in 2017.</p></div>
+        <div class="edu-entry"><h3>National Taiwan Normal University — Business Administration</h3><p>Completed in 2016.</p></div>
       </div>
     </div></section>
     <section id="skills"><div class="container">
