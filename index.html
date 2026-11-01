@@ -7,10 +7,10 @@
   <title>AI &amp; Machine Learning Portfolio | Sunny</title>
   <style>
     :root{--navy:#14263b;--navy2:#213b55;--aqua:#86d4df;--ink:#203044;--muted:#55667a;--line:#e1e7ed;--bg:#f5f8fa}
-    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.65;color:var(--ink);background:white}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:100px}body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.65;color:var(--ink);background:white}
     a{color:#165f7d}a:hover{text-decoration:underline}.container{max-width:1080px;margin:auto;padding:0 24px}
-    .top,.hero{background:var(--navy);color:white}.top{border-bottom:1px solid #3c5064}.nav{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
-    .brand{font-weight:750;font-size:1.03rem;color:white;text-decoration:none}.links{display:flex;gap:20px;flex-wrap:wrap}.links a{font-size:.92rem;text-decoration:none;color:#dce8f0}
+    .top,.hero{background:var(--navy);color:white}.top{border-bottom:1px solid #3c5064;position:sticky;top:0;z-index:1000;box-shadow:0 3px 12px rgba(0,0,0,.12)}.nav{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+    .brand{font-weight:750;font-size:1.03rem;color:white;text-decoration:none}.links{display:flex;gap:20px;flex-wrap:wrap}.links a{font-size:.92rem;text-decoration:none;color:#dce8f0}.links a:focus-visible,.brand:focus-visible{outline:2px solid var(--aqua);outline-offset:4px;border-radius:3px}.links a:hover{color:white;text-decoration:underline}
     .hero{padding:85px 0 100px}.eyebrow{color:var(--aqua);font-size:.81rem;letter-spacing:.13em;font-weight:750;text-transform:uppercase}
     h1{font-size:clamp(2.3rem,5vw,4.2rem);line-height:1.16;letter-spacing:-.04em;max-width:850px;margin:22px 0}
     .hero p{max-width:740px;font-size:1.15rem;color:#dde8f0}.button{display:inline-block;background:var(--aqua);color:#14263b;border-radius:7px;padding:11px 19px;font-weight:700;text-decoration:none;margin-top:16px}
@@ -23,7 +23,7 @@
     .skills{display:flex;flex-wrap:wrap;gap:10px;padding:0;list-style:none}.skills li{background:#eaf0f5;border-radius:99px;padding:9px 15px;font-size:.92rem}
     .intro-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:32px}.info-panel{border:1px solid var(--line);border-radius:12px;padding:25px;background:var(--bg)}.info-panel h3{font-size:1.08rem}.entry{border-left:3px solid #bad8e0;padding:0 0 4px 22px;margin:0 0 28px}.entry:last-child{margin-bottom:0}.entry h3{font-size:1.08rem;margin-bottom:4px}.entry .meta{font-size:.88rem;color:var(--muted);font-weight:650;margin-bottom:11px}.entry p{margin-bottom:0}.education-list{display:grid;gap:16px}.edu-entry{padding:20px 24px;border:1px solid var(--line);border-radius:11px;background:white}.edu-entry h3{font-size:1.08rem;margin-bottom:5px}.edu-entry p{margin:0;color:var(--muted)}
     footer{background:var(--navy);color:#dce7ef;padding:30px 0}footer a{color:var(--aqua)}
-    @media(max-width:660px){.hero{padding:65px 0 75px}.cards,.future,.intro-grid{grid-template-columns:1fr}.workshop{padding:21px}.links{gap:13px}section{padding:55px 0}}
+    @media(max-width:660px){html{scroll-padding-top:165px}.hero{padding:65px 0 75px}.cards,.future,.intro-grid{grid-template-columns:1fr}.workshop{padding:21px}.links{gap:13px}section{padding:55px 0}}
   </style>
 </head>
 <body>
@@ -31,8 +31,7 @@
     <nav class="container nav" aria-label="Main navigation">
       <a href="#home" class="brand">Sunny | AI &amp; ML Portfolio</a>
       <div class="links">
-        <a href="#about">About</a><a href="#workshops">Workshops</a><a href="#experience">Experience</a><a href="#education">Education</a><a href="#skills">Skills</a>
-        <a href="https://github.com/quiksun/AI-ML-Professional-Portfolio">GitHub</a>
+        <a href="#home">Home</a><a href="#about">About Me</a><a href="#experience">Experience</a><a href="#education">Education</a><a href="#workshops">Artifacts</a>
       </div>
     </nav>
   </header>
@@ -58,28 +57,6 @@
           <h3>Target Audience</h3>
           <p>This portfolio is intended for employers and collaborators in market research, business analytics, business intelligence, and operations. It also offers examples for students and professionals exploring how AI can support research, reporting, and everyday problem-solving.</p>
         </div>
-      </div>
-    </div></section>
-    <section class="alt" id="workshops"><div class="container">
-      <div class="section-intro"><div class="eyebrow">Portfolio</div>
-        <h2>Coursework &amp; Portfolio Artifacts</h2>
-        <p class="muted">Each workshop introduces core concepts and practical applications. Selected assignments are listed below; full documents and supporting materials will be linked as they are added.</p>
-      </div>
-      <div class="workshop">
-        <div class="tag">Workshop 1</div>
-        <h3>Foundations of Artificial Intelligence</h3>
-        <p>An introduction to the history and evolution of artificial intelligence, generative AI applications, AI-assisted research, prompt engineering, and design thinking. This workshop emphasizes critically evaluating AI outputs and responsible human oversight.</p>
-        <div class="cards">
-          <article class="card"><div class="tag">Assignment 1.3</div><h4>AI Timeline — The Evolution of Artificial Intelligence</h4><p><a href="Workshop-1/Assignment-1.3-AI_Timeline/AI_History_Infographic.png" target="_blank" rel="noopener noreferrer">View AI Timeline infographic →</a></p><p><a href="Workshop-1/Assignment-1.3-AI_Timeline/AI_History_Timeline.pdf" target="_blank" rel="noopener noreferrer">View AI History timeline (PDF) →</a></p></article>
-          <article class="card"><div class="tag">Assignment 1.4</div><h4>Generative AI Lab and Design Thinking</h4><a href="Workshop-1/Assignment-1.4-AI_Labs/Tseng_YuHsuan_Assignment_1_4_AI_Lab.pdf" target="_blank" rel="noopener noreferrer">View Generative AI Lab (PDF) →</a></article>
-        </div>
-      </div>
-      <div class="future">
-        <div><strong>Workshop 2</strong><span>Workshop overview and selected artifacts coming soon.</span></div>
-        <div><strong>Workshop 3</strong><span>Workshop overview and selected artifacts coming soon.</span></div>
-        <div><strong>Workshop 4</strong><span>Workshop overview and selected artifacts coming soon.</span></div>
-        <div><strong>Workshop 5</strong><span>Workshop overview and selected artifacts coming soon.</span></div>
-        <div><strong>Workshop 6</strong><span>Workshop overview and selected artifacts coming soon.</span></div>
       </div>
     </div></section>
     <section id="experience"><div class="container">
@@ -112,6 +89,28 @@
         <div class="edu-entry"><h3>British Columbia Institute of Technology — Applied Data Analytics</h3><p>Expected completion: March 2027.</p></div>
         <div class="edu-entry"><h3>Michigan State University — Master of Science in Marketing Research</h3><p>Completed in 2017.</p></div>
         <div class="edu-entry"><h3>National Taiwan Normal University — Business Administration</h3><p>Completed in 2016.</p></div>
+      </div>
+    </div></section>
+    <section class="alt" id="workshops"><div class="container">
+      <div class="section-intro"><div class="eyebrow">Portfolio</div>
+        <h2>Coursework &amp; Portfolio Artifacts</h2>
+        <p class="muted">Each workshop introduces core concepts and practical applications. Selected assignments are listed below; full documents and supporting materials will be linked as they are added.</p>
+      </div>
+      <div class="workshop">
+        <div class="tag">Workshop 1</div>
+        <h3>Foundations of Artificial Intelligence</h3>
+        <p>An introduction to the history and evolution of artificial intelligence, generative AI applications, AI-assisted research, prompt engineering, and design thinking. This workshop emphasizes critically evaluating AI outputs and responsible human oversight.</p>
+        <div class="cards">
+          <article class="card"><div class="tag">Assignment 1.3</div><h4>AI Timeline — The Evolution of Artificial Intelligence</h4><p><a href="Workshop-1/Assignment-1.3-AI_Timeline/AI_History_Infographic.png" target="_blank" rel="noopener noreferrer">View AI Timeline infographic →</a></p><p><a href="Workshop-1/Assignment-1.3-AI_Timeline/AI_History_Timeline.pdf" target="_blank" rel="noopener noreferrer">View AI History timeline (PDF) →</a></p></article>
+          <article class="card"><div class="tag">Assignment 1.4</div><h4>Generative AI Lab and Design Thinking</h4><a href="Workshop-1/Assignment-1.4-AI_Labs/Tseng_YuHsuan_Assignment_1_4_AI_Lab.pdf" target="_blank" rel="noopener noreferrer">View Generative AI Lab (PDF) →</a></article>
+        </div>
+      </div>
+      <div class="future">
+        <div><strong>Workshop 2</strong><span>Workshop overview and selected artifacts coming soon.</span></div>
+        <div><strong>Workshop 3</strong><span>Workshop overview and selected artifacts coming soon.</span></div>
+        <div><strong>Workshop 4</strong><span>Workshop overview and selected artifacts coming soon.</span></div>
+        <div><strong>Workshop 5</strong><span>Workshop overview and selected artifacts coming soon.</span></div>
+        <div><strong>Workshop 6</strong><span>Workshop overview and selected artifacts coming soon.</span></div>
       </div>
     </div></section>
     <section id="skills"><div class="container">
