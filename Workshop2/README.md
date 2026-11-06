@@ -42,7 +42,7 @@ The infographic highlights:
 - A five-step framework for selecting an appropriate analytical approach.
 - The importance of evidence-based model evaluation.
 
-**Artifact:** [View Infographic](./Infographic/)
+**Artifact:** [View Infographic](./Workshop2/Machine Learning vs. Deep Learning Infographic.png/)
 
 ### 3. Interactive Simulation — Customer Churn Classifier
 
