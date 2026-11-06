@@ -1,0 +1,1711 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Interactive conceptual examples of churn classification and Transformer translation by Yu-Hsuan Tseng.">
+<title>Interactive ML and DL Examples | Yu-Hsuan Tseng</title>
+<style>:root {
+  color-scheme: light dark;
+  background-color: var(
+    --background,
+    var(--color-background-primary, light-dark(rgb(255 255 255), rgb(24 24 24)))
+  ) !important;
+
+  /* Agent-facing contract; keep in sync with SKILL.md. */
+  --background: var(
+    --color-background-primary,
+    light-dark(rgb(255 255 255), rgb(24 24 24))
+  );
+  --foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --card: color-mix(in oklab, var(--foreground) 5%, var(--background));
+  --card-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --popover: var(
+    --color-background-secondary,
+    light-dark(rgb(255 255 255), rgb(45 45 45))
+  );
+  --popover-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --primary: var(
+    --color-text-info,
+    light-dark(rgb(51 156 255), rgb(131 195 255))
+  );
+  --primary-foreground: var(
+    --color-text-inverse,
+    light-dark(rgb(255 255 255), rgb(13 13 13))
+  );
+  --secondary: var(
+    --color-background-secondary,
+    light-dark(rgb(255 255 255 / 96%), rgb(54 54 54 / 96%))
+  );
+  --secondary-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --muted: color-mix(in srgb, var(--foreground) 10%, transparent);
+  --muted-foreground: var(
+    --color-text-secondary,
+    light-dark(rgb(26 28 31 / 49.4%), rgb(255 255 255 / 49.8%))
+  );
+  --accent: var(
+    --color-background-info,
+    light-dark(rgb(229 242 255), rgb(13 39 63))
+  );
+  --accent-foreground: var(
+    --color-text-info,
+    light-dark(rgb(51 156 255), rgb(131 195 255))
+  );
+  --destructive: var(
+    --color-text-warning,
+    light-dark(rgb(226 85 7), rgb(255 133 73))
+  );
+  --border: var(
+    --color-border-secondary,
+    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
+  );
+  --input: var(
+    --color-border-primary,
+    light-dark(
+      rgb(26 28 31 / 11.8%),
+      color-mix(in oklab, rgb(0 0 0) 10%, transparent)
+    )
+  );
+  --ring: var(
+    --color-ring-primary,
+    light-dark(rgb(51 156 255), rgb(131 195 255 / 76%))
+  );
+  --font-size-base: var(--font-text-md-size, 16px);
+  --blue: light-dark(rgb(51 156 255), rgb(51 156 255));
+  --orange: light-dark(rgb(226 85 7), rgb(251 106 34));
+  --green: light-dark(rgb(0 162 64), rgb(64 201 119));
+  --red: light-dark(rgb(224 46 42), rgb(255 103 100));
+  --purple: light-dark(rgb(146 79 247), rgb(173 123 249));
+  --yellow: light-dark(rgb(255 195 0), rgb(255 210 64));
+  --viz-series-1: var(--primary);
+  --viz-series-2: light-dark(rgb(243 136 59), rgb(245 154 86));
+  --viz-series-3: light-dark(rgb(93 201 119), rgb(116 213 139));
+  --viz-series-4: light-dark(rgb(235 119 177), rgb(240 143 192));
+  --viz-series-5: light-dark(rgb(155 121 236), rgb(170 145 239));
+  --viz-series-6: light-dark(rgb(58 185 177), rgb(90 203 194));
+
+  /* Internal implementation variables; not part of the agent contract. */
+  --font-sans:
+    -apple-system-body, ui-sans-serif, -apple-system, system-ui, "Segoe UI",
+    Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji",
+    "Segoe UI Symbol";
+  --font-mono:
+    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono",
+    monospace;
+  --font-size-normal: max(11px, var(--font-size-base));
+  --font-size-tooltip: calc(var(--font-size-base) - 1px);
+  --font-size-small: max(11px, calc(var(--font-size-base) - 2px));
+  --font-size-h1: calc(var(--font-size-normal) * 1.7142857143);
+  --font-size-h2: calc(var(--font-size-normal) * 1.4285714286);
+  --font-size-h3: calc(var(--font-size-normal) * 1.2857142857);
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --icon-size: 16px;
+  --line-height-normal: calc(var(--font-size-normal) * 1.5);
+  --line-height-tooltip: calc(var(--font-size-tooltip) * 1.4285714286);
+  --line-height-small: calc(var(--font-size-small) + 4px);
+  --corner-shape: round;
+  --radius: var(--border-radius-lg, 8px);
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: calc(var(--radius) * 0.75);
+  --radius-lg: var(--radius);
+  --radius-2xl: calc(var(--radius) * 2);
+  --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px -1px rgb(0 0 0 / 8%);
+  --checkmark-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 17 17'%3E%3Cpath d='M12.8961 3.64101C13.1297 3.41418 13.4984 3.37523 13.7779 3.56581C14.0571 3.75635 14.1554 4.11331 14.0299 4.41347L13.9615 4.53847L7.71151 13.7045C7.59411 13.8767 7.4063 13.9877 7.19881 14.0072C6.99136 14.0267 6.78564 13.9533 6.63826 13.806L2.88826 10.056L2.79842 9.9457C2.6192 9.67407 2.64927 9.30496 2.88826 9.06581C3.12738 8.82669 3.49647 8.79676 3.76815 8.97597L3.8785 9.06581L7.03084 12.2182L12.8053 3.74941L12.8961 3.64101Z'/%3E%3C/svg%3E");
+
+  /* Legacy aliases; not part of the current agent contract. */
+  --viz-bg: transparent;
+  --viz-panel: var(--card);
+  --viz-border: var(--border);
+  --viz-text: var(--foreground);
+  --viz-muted: var(--muted-foreground);
+  --viz-accent: var(--primary);
+  --viz-accent-text: var(--primary-foreground);
+  --viz-accent-bg: var(--accent);
+  --viz-font-size: var(--font-size-base);
+  --viz-warning: var(--destructive);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html > body {
+  /* Preserve MCP aliases for older inline renderers without creating :root cycles. */
+  --color-background-primary: var(
+    --background,
+    light-dark(rgb(255 255 255), rgb(24 24 24))
+  );
+  --color-text-primary: var(
+    --foreground,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --color-border-secondary: var(
+    --border,
+    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
+  );
+
+  margin: 0;
+  padding: var(--visualize-paint-gutter, 0px);
+  color: var(--foreground);
+  background: transparent !important;
+  font-family: var(--font-sans) !important;
+  -webkit-font-smoothing: antialiased;
+  font-size: var(--font-size-base);
+  line-height: calc(var(--font-size-base) * 1.625);
+  font-weight: var(--font-weight-normal);
+}
+
+:root:not([data-app-block-surface], [data-visualize-standalone]) > body {
+  padding: 12px;
+}
+
+.cursor-interaction {
+  cursor: var(--cursor-interaction, pointer);
+}
+
+a {
+  color: color-mix(in srgb, var(--viz-accent) 80%, var(--viz-text) 20%);
+  cursor: var(--cursor-interaction, pointer);
+  text-decoration: none;
+  text-underline-offset: 2px;
+  font-weight: inherit;
+}
+
+a:is(:hover, :focus-visible) {
+  text-decoration-line: underline;
+  text-decoration-style: dashed;
+  text-decoration-thickness: 0.5px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-block: 0;
+}
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+li,
+.table {
+  font-family: var(--font-sans);
+}
+
+h1 {
+  font-size: calc(var(--font-size-base) * 1.5);
+  line-height: 1.3333333333;
+}
+
+h2 {
+  font-size: calc(var(--font-size-base) * 1.25);
+  line-height: 1.4;
+}
+h3 {
+  font-size: calc(var(--font-size-base) * 1.125);
+  line-height: 1.5555555556;
+}
+h4 {
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+}
+h5,
+h6 {
+  font-size: var(--font-size-base);
+  line-height: calc(var(--font-size-base) * 1.625);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+b,
+strong,
+th {
+  font-weight: 600;
+}
+
+code:not(pre code) {
+  display: inline;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  corner-shape: var(--corner-shape);
+  background: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  overflow-wrap: anywhere;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  word-break: break-word;
+}
+pre,
+pre code {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.table {
+  width: 100%;
+  color: var(--foreground);
+  font: inherit;
+  text-align: start;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: calc(var(--font-size-base) * 0.875);
+  line-height: calc(var(--font-size-base) * 1.625);
+  font-family: var(--font-sans);
+}
+
+.table :is(th, td) {
+  padding-block: 10px;
+  padding-inline: 0 24px;
+  overflow-wrap: anywhere;
+  border-bottom: 1px solid var(--border);
+  text-align: start;
+  vertical-align: top;
+  border-bottom-color: color-mix(in srgb, var(--foreground) 5%, transparent);
+}
+.table :is(th, td):not(:last-child) {
+  padding-inline-end: calc(var(--font-size-base) * 1.5);
+}
+
+.table-responsive > .table :is(th, td) {
+  overflow-wrap: break-word;
+}
+
+.table :is(th, td):last-child {
+  padding-inline-end: 0;
+}
+
+.table :is(caption, thead th) {
+  font-weight: 600;
+}
+
+.table thead :is(th, td) {
+  border-bottom-color: var(--border-strong, var(--input));
+  padding-block: calc(var(--font-size-base) / 2);
+  line-height: var(--font-size-base);
+}
+
+.table tbody tr:last-child :is(th, td) {
+  border-bottom: 0;
+}
+.table tbody :is(th, td) {
+  padding-block: calc(var(--font-size-base) * 0.625);
+}
+
+.table.table-sm :is(th, td) {
+  padding-block: 8px;
+}
+
+.table.table-sm :is(th, td):not(:last-child) {
+  padding-inline-end: 16px;
+}
+
+.table :is(.text-end, [align="right"]) {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.table :is(.text-center, [align="center"]) {
+  text-align: center;
+}
+
+.table .text-nowrap {
+  white-space: nowrap;
+}
+
+#widget {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  padding: 0;
+  background: transparent !important;
+}
+
+.card {
+  min-width: 0;
+  padding: 12px;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  border-radius: var(--radius-2xl);
+  corner-shape: var(--corner-shape);
+  color: var(--card-foreground);
+  background: var(--card);
+}
+
+.widget {
+  min-width: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-lg);
+  corner-shape: var(--corner-shape);
+  box-shadow: 0 0 0 0.5px var(--border-strong, var(--border));
+  color: var(--foreground);
+  background: var(--background);
+}
+
+#widget > :not(.card, .widget, .progress) {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 50;
+  top: 0;
+  left: 0;
+  width: max-content;
+  max-width: min(
+    20rem,
+    var(--tooltip-available-width, calc(100vw - 10px)),
+    calc(100vw - 10px)
+  );
+  max-height: min(
+    var(--tooltip-available-height, calc(100vh - 10px)),
+    calc(100vh - 10px)
+  );
+  border: 1px solid var(--border);
+  corner-shape: var(--corner-shape);
+  overflow-wrap: break-word;
+  white-space: normal;
+  pointer-events: none;
+  user-select: none;
+  font-family: var(--font-sans);
+  padding: 5px 12px;
+  border-color: color-mix(
+    in oklab,
+    light-dark(var(--primary-foreground), var(--foreground)) 5%,
+    transparent
+  );
+  border-radius: var(--radius-2xl);
+  color: light-dark(var(--primary-foreground), var(--foreground));
+  background: light-dark(var(--foreground), var(--popover));
+  box-shadow: 0 8px 18px rgb(15 23 42 / 20%);
+  letter-spacing: -0.15px;
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: 600;
+  line-height: 18px;
+  text-align: center;
+}
+
+/* The shared runtime owns data-tooltip; suppress AppBlock's pseudo-tooltip. */
+main [data-tooltip]::after {
+  content: none;
+}
+
+.viz-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(max(180px, 24%), 1fr));
+  gap: 10px;
+}
+
+.viz-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.viz-stat-value {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+.viz-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+hr {
+  width: 100%;
+  height: 1px;
+  margin-block: 6px;
+  border: 0;
+  background: var(--border);
+}
+
+.nav {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 4px;
+}
+
+.progress {
+  display: flex;
+  height: 8px;
+  margin-block: calc((var(--line-height-normal, 1.5em) - 8px) / 2);
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+}
+
+.progress-bar:only-child {
+  border-radius: var(--radius-full);
+}
+
+.progress-bar {
+  height: 100%;
+  flex-shrink: 0;
+  border: 0;
+  background: var(--viz-series-1);
+}
+
+.viz-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  color: color-mix(in srgb, var(--foreground) 40%, var(--muted-foreground));
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  font-family: var(--font-sans);
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: var(--font-weight-normal);
+  line-height: 1;
+}
+
+small,
+.text-small {
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+}
+
+.text-muted {
+  color: var(--muted-foreground);
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.viz-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.viz-controls > .form-label {
+  display: grid;
+  min-width: min(100%, 260px);
+  flex: 1 1 280px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 2px 12px;
+  margin-bottom: 0;
+}
+
+.viz-controls > .form-label > :is(.form-control, .form-range, .form-select) {
+  grid-column: 1 / -1;
+}
+
+.btn,
+.nav-link,
+.form-check-input,
+.form-control,
+.form-range,
+.form-select {
+  font: inherit;
+}
+
+/* Match inline alignment without overriding a containing flex or grid layout. */
+.btn,
+.nav-link,
+.form-control,
+.form-select,
+.form-range,
+.form-check {
+  vertical-align: middle;
+}
+
+.btn,
+.nav-link {
+  appearance: button;
+  display: inline-flex;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin: 0;
+  padding: 0 8px;
+  -webkit-app-region: no-drag;
+  border: 1px solid var(--input);
+  corner-shape: var(--corner-shape);
+  cursor: var(--cursor-interaction, pointer);
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-font-smoothing: inherit;
+  font-family: var(--font-sans);
+  height: fit-content;
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  padding-inline: var(--control-spacing, 12px);
+  border-color: transparent;
+  border-radius: var(--radius-full);
+  color: var(--foreground);
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: var(--font-weight-normal);
+  line-height: 18px;
+}
+
+.btn {
+  border-color: var(--border);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+}
+
+.btn:is(.btn-block, .viz-tile) {
+  inline-size: 100%;
+}
+
+.btn.viz-tile {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+a.btn {
+  cursor: var(--cursor-interaction, pointer);
+  text-decoration: none;
+}
+
+.btn:not(:disabled):hover {
+  background: light-dark(
+    color-mix(in srgb, var(--foreground) 5.5%, transparent),
+    color-mix(in srgb, var(--foreground) 8%, transparent)
+  );
+}
+
+.nav-link:not(:disabled):not([aria-disabled="true"]):hover {
+  background: color-mix(in srgb, var(--foreground) 10%, transparent);
+}
+
+.btn-primary {
+  border-color: var(--border);
+  color: var(--primary-foreground);
+  background: var(--foreground);
+  background-clip: border-box;
+}
+
+.btn-primary .text-muted {
+  color: color-mix(in srgb, var(--primary-foreground) 50%, transparent);
+}
+
+.btn-primary:not(:disabled):hover {
+  background: color-mix(in srgb, var(--foreground) 80%, transparent);
+  background-clip: border-box;
+}
+
+.btn-ghost {
+  border-color: transparent;
+  color: var(--muted-foreground);
+  background: transparent;
+}
+
+.btn-ghost:not(:disabled):hover {
+  color: var(--muted-foreground);
+  background: light-dark(
+    color-mix(in srgb, var(--foreground) 5.5%, transparent),
+    color-mix(in srgb, var(--foreground) 8%, transparent)
+  );
+}
+
+.nav-pills .nav-link {
+  min-width: 0;
+  border-color: transparent;
+  color: var(--muted-foreground);
+  background: transparent;
+}
+
+.nav-justified .nav-link {
+  flex: 1 1 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.nav-pills .nav-link.active {
+  color: var(--foreground);
+  background: var(--muted);
+}
+
+/* Shared preview chrome; product styles stay inside each variant. */
+.viz-dotted-background {
+  background-image: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--foreground) 14%, transparent) 0.8px,
+    transparent 0.8px
+  );
+  background-position: center;
+  background-size: 16px 16px;
+}
+
+.viz-carousel {
+  position: relative;
+  min-width: 0;
+}
+
+.viz-carousel:has(> .viz-carousel-controls) {
+  min-height: calc(60px + var(--viz-carousel-picker-height, 0px));
+  padding-bottom: 60px;
+}
+
+.viz-carousel > [data-variant][hidden] {
+  display: none !important;
+}
+
+.viz-carousel > [data-variant] {
+  isolation: isolate;
+}
+
+.viz-carousel-controls {
+  --viz-carousel-hover: light-dark(
+    color-mix(in srgb, var(--foreground) 5.4%, transparent),
+    color-mix(in srgb, var(--foreground) 7.8%, transparent)
+  );
+  position: absolute;
+  z-index: 2;
+  bottom: 8px;
+  left: 50%;
+  display: flex;
+  width: max-content;
+  /* Leave room for the host's design-controls launcher at the trailing edge. */
+  max-width: calc(100% - 96px);
+  align-items: center;
+  gap: 0;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-sans);
+  /* Match the settings dropdown chrome independently of the content font size. */
+  font-size: 13px;
+  font-weight: var(--font-weight-normal);
+  line-height: 18px;
+  transform: translateX(-50%);
+  user-select: none;
+}
+
+/* Keep authored mockup button styles out of the shared carousel chrome. */
+.viz-carousel-controls button,
+.viz-carousel-picker > summary {
+  display: flex !important;
+  height: auto !important;
+  min-height: 30px;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px;
+  padding: 0 6px !important;
+  -webkit-app-region: no-drag;
+  border: 0 !important;
+  border-radius: 14px !important;
+  color: inherit !important;
+  background: transparent !important;
+  font: inherit !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.viz-carousel-controls > button,
+.viz-carousel-picker > summary {
+  position: relative;
+  isolation: isolate;
+}
+
+.viz-carousel-controls > button {
+  --icon-size: 16px;
+  width: 30px !important;
+  padding: 0 !important;
+}
+
+.viz-carousel-picker > summary {
+  padding-inline: 12px !important;
+}
+
+.viz-carousel-controls .viz-carousel-caret {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  margin: 0;
+  color: inherit;
+  transform: rotate(180deg);
+}
+
+.viz-carousel-controls > button > svg,
+.viz-carousel-controls .viz-carousel-caret,
+.viz-carousel-count {
+  opacity: 0.5;
+}
+
+.viz-carousel-controls > button::before,
+.viz-carousel-picker > summary::before {
+  position: absolute;
+  z-index: -1;
+  inset: 3px;
+  border-radius: 12px;
+  content: "";
+  pointer-events: none;
+}
+
+.viz-carousel-controls > button:hover::before,
+.viz-carousel-picker > summary:hover::before {
+  background: var(--viz-carousel-hover);
+}
+
+.viz-carousel-controls > button,
+.viz-carousel-controls [data-lucide],
+.viz-carousel-controls .lucide {
+  flex-shrink: 0;
+}
+
+.viz-carousel-picker {
+  min-width: 0;
+}
+
+.viz-carousel-picker > summary {
+  min-width: 0;
+  list-style: none;
+}
+
+.viz-carousel-picker > summary::-webkit-details-marker {
+  display: none;
+}
+
+.viz-carousel-count {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.viz-carousel-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.viz-carousel-options {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 4px);
+  left: 0;
+  display: flex;
+  max-height: 240px;
+  flex-direction: column;
+  gap: 2px;
+  overflow: auto;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--background);
+  box-shadow: 0 4px 12px light-dark(rgb(0 0 0 / 6%), rgb(0 0 0 / 25%));
+}
+
+.viz-carousel-options > button {
+  border-radius: max(0px, calc(var(--radius-lg) - 5px)) !important;
+  width: 100% !important;
+  min-height: 28px;
+  justify-content: flex-start !important;
+  padding: 4px 8px !important;
+  font-size: var(--font-size-small) !important;
+  text-align: start;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.viz-carousel-options > [aria-current="true"],
+.viz-carousel-options > button:hover {
+  background: var(--viz-carousel-hover) !important;
+}
+
+.btn:disabled,
+.nav-link:disabled,
+.nav-link[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+[data-lucide] {
+  stroke-width: 1.6;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--foreground);
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  padding: 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  corner-shape: var(--corner-shape);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  height: calc(12px + 2 * var(--control-spacing, 12px));
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  padding-inline: calc(4px + var(--control-spacing, 12px) / 2);
+  border-color: var(--input);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--popover) 96%, transparent);
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.4285714286;
+}
+.form-control:is(
+  [type="file"],
+  [type="date"],
+  [type="datetime-local"],
+  [type="month"],
+  [type="week"],
+  [type="color"]
+) {
+  height: calc(12px + 2 * var(--control-spacing, 12px));
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  line-height: 18px;
+}
+.form-control:is(
+  [type="date"],
+  [type="datetime-local"],
+  [type="month"],
+  [type="week"]
+) {
+  padding-inline: var(--control-spacing, 12px);
+}
+
+.form-control::placeholder {
+  color: var(--muted-foreground);
+}
+
+.form-control[type="file"] {
+  overflow: hidden;
+  cursor: var(--cursor-interaction, pointer);
+  padding: 0;
+}
+
+.form-control[type="file"]::file-selector-button {
+  padding: 0 8px;
+  border: 0;
+  border-right: 1px solid var(--input);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: inherit;
+  font: inherit;
+  min-height: calc(10px + 2 * var(--control-spacing, 12px));
+  padding-inline: var(--control-spacing, 12px);
+  margin-inline-end: var(--control-spacing, 12px);
+}
+
+.form-control[type="file"]:not(:disabled):hover::file-selector-button {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-control-color[type="color"] {
+  width: 40px;
+  height: calc(12px + 2 * var(--control-spacing, 12px));
+  padding: 3px;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control-color[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.form-control-color[type="color"]::-webkit-color-swatch {
+  border: 0;
+  border-radius: calc(var(--radius-lg) - 4px);
+  corner-shape: var(--corner-shape);
+}
+
+textarea.form-control {
+  height: auto;
+  resize: vertical;
+  min-height: 96px;
+  padding: 8px 10px;
+}
+
+.form-control:focus-visible {
+  border-color: var(--ring);
+  box-shadow: none;
+}
+.form-control:disabled {
+  color: var(--muted-foreground);
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  opacity: 1;
+}
+.form-control[aria-invalid="true"] {
+  border-color: var(--red);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--red) 20%, transparent);
+}
+
+.form-control:disabled,
+.form-select:disabled {
+  cursor: not-allowed;
+}
+
+.form-select {
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: fit-content;
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  margin: 0;
+  /* The secondary icon role is 14px at compact density and 16px at web density. */
+  --icon-size: calc(10px + var(--control-spacing, 12px) / 2);
+  /* Settings dropdowns retain a 12px inset and a 4px text-to-chevron gap. */
+  padding: 0 calc(16px + var(--icon-size)) 0 12px;
+  outline: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  corner-shape: var(--corner-shape);
+  color: var(--foreground);
+  background-color: var(--secondary);
+  background-image:
+    linear-gradient(
+      45deg,
+      transparent calc(50% - 0.6px),
+      var(--muted-foreground) calc(50% - 0.6px) calc(50% + 0.6px),
+      transparent calc(50% + 0.6px)
+    ),
+    linear-gradient(
+      135deg,
+      transparent calc(50% - 0.6px),
+      var(--muted-foreground) calc(50% - 0.6px) calc(50% + 0.6px),
+      transparent calc(50% + 0.6px)
+    );
+  background-position:
+    calc(100% - 12px - var(--icon-size) / 2) 50%,
+    calc(100% - 12px - var(--icon-size) * 0.18) 50%;
+  background-repeat: no-repeat;
+  background-size: calc(var(--icon-size) * 0.32) calc(var(--icon-size) * 0.32);
+  cursor: var(--cursor-interaction, default);
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: var(--font-weight-normal);
+  line-height: 18px;
+}
+
+.form-select :is(option, optgroup) {
+  color: var(--popover-foreground);
+  background-color: var(--popover);
+}
+
+.form-select :is(option, optgroup):disabled {
+  color: var(--muted-foreground);
+}
+
+.form-select:not(:disabled):hover {
+  background-color: light-dark(
+    color-mix(in srgb, var(--foreground) 5.5%, transparent),
+    color-mix(in srgb, var(--foreground) 8%, transparent)
+  );
+}
+
+.form-select:focus-visible {
+  box-shadow: 0 0 0 2px var(--ring);
+}
+.form-select:disabled {
+  opacity: 0.4;
+}
+
+.form-check {
+  display: flex;
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  align-items: center;
+  gap: 6px;
+}
+
+.form-check-input {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  margin: 0;
+  border: 1px solid var(--input);
+  color: var(--primary-foreground);
+  background-color: transparent;
+  cursor: var(--cursor-interaction, default);
+  transition:
+    background-color 150ms,
+    border-color 150ms,
+    box-shadow 150ms;
+}
+
+.form-check:not(.form-switch) .form-check-input[type="checkbox"] {
+  corner-shape: round;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  width: calc(10px + var(--control-spacing, 12px) / 2);
+  height: calc(10px + var(--control-spacing, 12px) / 2);
+  border-color: var(--border-strong, var(--input));
+  border-radius: calc(var(--radius-sm) / 2);
+  background-color: transparent;
+  color: var(--foreground);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input:not(:disabled):not(:checked):hover {
+  background-color: var(--card);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input[type="checkbox"]:is(:checked, :indeterminate) {
+  border-color: var(--border-strong, var(--input));
+  background-color: color-mix(in srgb, var(--popover) 96%, transparent);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input[type="checkbox"]:checked::before {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--primary-foreground);
+  content: "";
+  mask: var(--checkmark-image) center / 12px 12px no-repeat;
+  background-color: var(--foreground);
+}
+.form-check:not(.form-switch)
+  .form-check-input[type="checkbox"]:indeterminate::before {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 65%;
+  height: 6.65%;
+  margin: auto;
+  border-radius: var(--radius-full);
+  background: var(--foreground);
+  mask: none;
+  content: "";
+}
+
+.form-check-input[type="radio"] {
+  border-radius: var(--radius-full);
+  width: 16px;
+  height: 16px;
+  border: 0;
+  box-shadow: inset 0 0 0 1px var(--input);
+}
+
+.form-check-input[type="radio"]:checked {
+  border: 0;
+  background: radial-gradient(
+    circle,
+    var(--primary-foreground) 0 3px,
+    var(--foreground) 3px
+  );
+  box-shadow: none;
+}
+
+.form-check:not(.form-switch) .form-check-input:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+.form-check:not(.form-switch) .form-check-input[type="checkbox"]:focus-visible {
+  border-color: var(--ring);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+}
+.form-check:not(.form-switch) .form-check-input[type="radio"]:disabled,
+.form-check:not(.form-switch)
+  .form-check-input[type="radio"]:disabled
+  + .form-check-label {
+  opacity: 0.5;
+}
+
+.form-switch .form-check-input:disabled,
+.form-switch .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.form-check-label {
+  color: var(--foreground);
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-switch .form-check-input {
+  position: relative;
+  width: 32px;
+  height: 20px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+  box-shadow: none;
+  transition: background-color 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border: 1px solid light-dark(var(--primary-foreground), var(--foreground));
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-sm);
+  content: "";
+  transform: translate(2px, -50%);
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+  border-color: #fff;
+  background: #fff;
+}
+
+.form-switch .form-check-input:checked {
+  background: var(--blue);
+}
+
+.form-switch .form-check-input:checked::before {
+  transform: translate(14px, -50%);
+}
+
+.form-switch .form-check-input:focus-visible {
+  box-shadow: 0 0 0 2px var(--ring);
+  outline: none;
+}
+
+.form-range {
+  appearance: none;
+  display: block;
+  width: 100%;
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  accent-color: var(--primary);
+  height: calc(12px + 2 * var(--control-spacing, 12px));
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  outline: none;
+  border-radius: var(--radius-full);
+  color: var(--foreground);
+  background: transparent;
+}
+
+.form-range::-webkit-slider-runnable-track {
+  background: var(--form-range-track, var(--border));
+  height: 2px;
+  border-radius: var(--radius-full);
+}
+
+.form-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  margin-top: -9px;
+  border-color: transparent;
+  background: currentColor;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Outline the native track and thumb, preserving the larger input hit area. */
+.form-range:focus-visible::-webkit-slider-runnable-track {
+  outline: 2px auto Highlight;
+  outline-color: -webkit-focus-ring-color;
+}
+
+.form-range::-moz-range-track {
+  background: var(--form-range-track, var(--border));
+  height: 2px;
+  border-radius: var(--radius-full);
+}
+
+.form-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  border-color: transparent;
+  background: currentColor;
+  box-shadow: var(--shadow-sm);
+}
+
+.form-range:focus-visible::-moz-range-thumb {
+  outline: 2px solid Highlight;
+  outline-offset: 2px;
+}
+
+.form-range:disabled {
+  opacity: 1;
+  cursor: default;
+}
+
+.btn:not(.btn-primary, .viz-tile):is(
+  [aria-pressed="true"],
+  [aria-selected="true"],
+  .is-selected
+) {
+  border-color: transparent;
+  color: var(--primary-foreground);
+  background: var(--blue);
+}
+
+.btn.viz-tile:is([aria-pressed="true"], [aria-selected="true"], .is-selected) {
+  border-color: var(--primary);
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+
+.btn:focus-visible,
+.nav-link:focus-visible {
+  outline-offset: 2px;
+  outline: none;
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.viz-carousel-controls :is(button, summary):focus-visible {
+  outline: 2px solid var(--ring) !important;
+  outline-offset: 2px !important;
+}
+
+/* Web recipes are the default, including on renderers without inline style queries. */
+@supports (border-radius: if(style(--corner-shape: round): 1px; else: 2px)) {
+  /* Match the host's proportional text-sm scale at every text preference. */
+  .tooltip,
+  .viz-badge,
+  .btn,
+  .nav-link,
+  .form-control,
+  .form-select {
+    font-size: if(
+      style(--corner-shape: round): round(
+          nearest,
+          calc(var(--font-size-base) * 14 / 16),
+          1px
+        );
+        else: round(nearest, calc(var(--font-size-base) * 13 / 14), 1px)
+    );
+  }
+
+  .btn,
+  .nav-link,
+  .form-select {
+    border-radius: if(
+      style(--corner-shape: round): var(--radius-full); else: var(--radius-lg)
+    );
+  }
+
+  .form-check:not(.form-switch) .form-check-input[type="checkbox"] {
+    border-radius: if(
+      style(--corner-shape: round): calc(var(--radius-sm) / 2);
+        else: calc(var(--radius-lg) * 0.4)
+    );
+  }
+
+  .tooltip {
+    font-weight: if(
+      style(--corner-shape: round): 600; else: var(--font-weight-normal)
+    );
+  }
+}
+
+@media (pointer: coarse) {
+  .viz-carousel:has(> .viz-carousel-controls) {
+    min-height: calc(76px + var(--viz-carousel-picker-height, 0px));
+    padding-bottom: 76px;
+  }
+
+  .btn,
+  .nav-link,
+  .viz-carousel-controls button,
+  .viz-carousel-picker > summary,
+  .form-control,
+  .form-select {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Keep small-screen WebKit from zooming when a text field receives focus. */
+  .form-control,
+  .form-select {
+    font-size: max(16px, calc(var(--font-size-base) * 14 / 16));
+    font-size: max(
+      16px,
+      round(nearest, calc(var(--font-size-base) * 14 / 16), 1px)
+    );
+  }
+  .form-control:is(
+    [type="file"],
+    [type="date"],
+    [type="datetime-local"],
+    [type="month"],
+    [type="week"],
+    [type="time"],
+    [type="color"]
+  ) {
+    height: 44px;
+    min-height: 44px;
+    font-size: max(16px, calc(var(--font-size-base) * 14 / 16));
+    font-size: max(
+      16px,
+      round(nearest, calc(var(--font-size-base) * 14 / 16), 1px)
+    );
+  }
+
+  .form-control[type="file"]::file-selector-button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .form-control-color[type="color"] {
+    width: 44px;
+    height: 44px;
+  }
+
+  .form-control:is(
+    [type="date"],
+    [type="datetime-local"],
+    [type="month"],
+    [type="time"],
+    [type="week"]
+  ) {
+    min-width: 0;
+    max-width: 100%;
+    padding-block: 8px;
+  }
+
+  .form-check {
+    min-height: 44px;
+    padding-inline: 15px;
+  }
+
+  .form-check-input {
+    position: relative;
+  }
+
+  .form-check-input::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 44px;
+    height: 44px;
+    content: "";
+    transform: translate(-50%, -50%);
+  }
+
+  .form-check-label {
+    display: inline-flex;
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+  }
+
+  .form-range {
+    height: 44px;
+    touch-action: pan-y;
+  }
+}
+
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+#widget > svg {
+  width: 100%;
+}
+
+/* Model-authored chart rules can otherwise stretch icons after these styles load. */
+svg.lucide {
+  display: block;
+  width: var(--icon-size) !important;
+  height: var(--icon-size) !important;
+  flex: none;
+  margin: 0 !important;
+  stroke-width: 1.6;
+}
+
+.text-warning,
+.text-destructive {
+  color: var(--destructive);
+}
+
+html>body{padding:0}
+
+:root{color-scheme:light;--background:#ffffff;--foreground:#203044;--card:#ffffff;--card-foreground:#203044;--primary:#14263b;--primary-foreground:#ffffff;--secondary:#eef4f6;--secondary-foreground:#203044;--muted:#f1f6f8;--muted-foreground:#55667a;--accent:#e5f2f5;--accent-foreground:#14263b;--border:#d9e3e8;--input:#b7c9d3;--ring:#17677e;--viz-series-1:#17677e;--font-size-base:16px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;padding:0;background:var(--background);color:var(--foreground);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.65}
+a{color:#165f7d;text-underline-offset:3px}a:hover{color:#14263b}a:focus-visible{outline:2px solid #17677e;outline-offset:4px}
+.shell{max-width:1020px;margin:auto;padding:0 28px}.project-header{background:#14263b;color:#fff;padding:21px 0}.project-header .shell{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}.project-header a{color:#dce8f0}.project-brand{font-weight:650;color:#fff;text-decoration:none}
+.project-hero{padding:64px 0 38px}.project-label{font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;color:#17677e;font-weight:650}.project-hero h1{font-size:clamp(2.1rem,5vw,3.4rem);font-weight:650;line-height:1.15;letter-spacing:-.035em;margin:16px 0 22px;max-width:850px}.project-hero p{max-width:850px;margin:0 0 16px}.project-intro{font-size:1.12rem;color:#445b6d}.project-nav{display:flex;gap:22px;flex-wrap:wrap;margin-top:24px;padding-bottom:24px;border-bottom:1px solid #e1e7ed}.project-section{padding:38px 0 46px;scroll-margin-top:20px}.project-section+.project-section{border-top:1px solid #e1e7ed}.demo-intro{max-width:850px;margin:0 0 25px}.project-notes h2{margin-top:0}.project-notes p{max-width:880px;margin:0 0 18px}.project-notes strong{font-weight:600}.project-sources{padding-left:22px;max-width:880px}.project-sources li{margin:10px 0}.project-footer{background:#14263b;color:#dce8f0;padding:28px 0;margin-top:20px}.project-footer a{color:#86d4df}.project-footer p{margin:0}
+#churn-classifier-example h2,#transformer-translation-example h2{font-size:1.65rem;line-height:1.25;font-weight:600;margin-top:0}
+#transformer-translation-example .target-groups{font-family:system-ui,"PingFang TC","Microsoft JhengHei",sans-serif}
+@media(max-width:600px){.shell{padding:0 18px}.project-hero{padding-top:38px}.project-section{padding:28px 0 34px}.project-header .shell{align-items:flex-start;flex-direction:column;gap:8px}.project-nav{gap:10px 20px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<header class="project-header"><div class="shell"><a class="project-brand" href="index.html">Sunny | AI &amp; ML Portfolio</a><a href="index.html#workshops">Back to portfolio</a></div></header>
+<main class="shell">
+  <div class="project-hero">
+    <div class="project-label">Workshop 2 · Portfolio Artifact 2</div>
+    <h1>Interactive ML and DL examples</h1>
+    <p class="project-intro">Explore how customer inputs can lead to a churn classification, and how context can change the meaning of a word during translation.</p>
+    <p>Adapted from Assignment 2.3 for employers and business analysts. These examples make the reasoning behind an output visible through interaction.</p>
+    <p><strong>Scope:</strong> Both examples are conceptual teaching demonstrations. The classifier uses hand-set rules; the translation output and attention cues are scripted. Neither uses trained weights or real customer data.</p>
+    <nav class="project-nav" aria-label="Artifact navigation"><a href="#churn-demo">Churn classification</a><a href="#translation-demo">Context and translation</a><a href="#project-notes">Project notes and sources</a></nav>
+  </div>
+  <section class="project-section" id="churn-demo" aria-label="Churn prediction demonstration">
+    <p class="demo-intro">Move the sliders to follow the decisions for an example customer. A trained decision tree learns its splits from labeled examples. Here, the thresholds are hand-set so the classification path is easy to inspect.</p>
+<div id="churn-classifier-example">
+  <style>
+    #churn-classifier-example { color: var(--foreground); }
+    #churn-classifier-example .tree-figure { margin: 16px 0 8px; }
+    #churn-classifier-example .tree-svg { display: block; width: 100%; overflow: visible; }
+    #churn-classifier-example .tree-svg text { fill: var(--foreground); font-family: inherit; }
+    #churn-classifier-example .node { fill: transparent; stroke: var(--border); stroke-width: 1; }
+    #churn-classifier-example .node.chosen { fill: color-mix(in srgb, var(--viz-series-1) 16%, transparent); }
+    #churn-classifier-example .edge { fill: none; stroke: var(--border); stroke-width: 1; }
+    #churn-classifier-example .edge.chosen { stroke: var(--viz-series-1); stroke-width: 2; }
+    #churn-classifier-example .branch-label { fill: var(--muted-foreground); }
+    #churn-classifier-example .result-line { margin: 12px 0 8px; }
+    #churn-classifier-example .result-line strong { font-weight: 500; }
+    #churn-classifier-example .route-key { display: inline-block; width: 12px; height: 12px; background: var(--viz-series-1); margin-right: 6px; vertical-align: middle; }
+  </style>
+  <h2>Churn classifier</h2>
+  <div class="text-small text-muted">Hand-set teaching rules · binary prediction for the next 30 days</div>
+  <div class="viz-controls">
+    <label class="form-label" for="churn-inactive">Days since last activity: <output id="churn-inactive-value" class="tabular-nums">18</output>
+      <input class="form-range" type="range" id="churn-inactive" min="0" max="30" step="1" value="18">
+    </label>
+    <label class="form-label" for="churn-usage">Uses in the past 30 days: <output id="churn-usage-value" class="tabular-nums">2</output>
+      <input class="form-range" type="range" id="churn-usage" min="0" max="20" step="1" value="2">
+    </label>
+    <label class="form-label" for="churn-tickets">Unresolved support tickets: <output id="churn-tickets-value" class="tabular-nums">0</output>
+      <input class="form-range" type="range" id="churn-tickets" min="0" max="5" step="1" value="0">
+    </label>
+  </div>
+  <figure class="tree-figure">
+    <svg class="tree-svg" role="img" aria-labelledby="churn-tree-title churn-tree-desc"></svg>
+  </figure>
+  <div class="result-line" aria-live="polite" aria-atomic="true">Predicted class: <strong id="churn-result">Churn</strong></div>
+  <div class="text-small text-muted"><span class="route-key" aria-hidden="true"></span>Highlighted route = decisions used for this customer</div>
+  <script>
+    (() => {
+      const root=document.getElementById('churn-classifier-example');
+      const svg=root.querySelector('.tree-svg');
+      const inactive=root.querySelector('#churn-inactive');
+      const usage=root.querySelector('#churn-usage');
+      const tickets=root.querySelector('#churn-tickets');
+      const ns='http://www.w3.org/2000/svg';
+      function add(tag,attrs,content){
+        const e=document.createElementNS(ns,tag);
+        Object.entries(attrs||{}).forEach(([k,v])=>e.setAttribute(k,String(v)));
+        if(content!==undefined)e.textContent=content;
+        svg.appendChild(e);return e;
+      }
+      function node(x,y,w,lines,active,leaf){
+        const h=leaf?48:58;
+        add('rect',{x:x-w/2,y,width:w,height:h,rx:6,class:'node'+(active?' chosen':'')});
+        const label=add('text',{x,y:y+(lines.length===1?h/2+5:23),'text-anchor':'middle','font-weight':active?'500':'400'});
+        lines.forEach((line,i)=>{const t=document.createElementNS(ns,'tspan');t.setAttribute('x',String(x));t.setAttribute('dy',i===0?'0':'19');t.textContent=line;label.appendChild(t);});
+      }
+      function edge(x1,y1,x2,y2,yes,active){
+        const mid=(y1+y2)/2;
+        add('path',{d:'M '+x1+' '+y1+' V '+mid+' H '+x2+' V '+y2,class:'edge'+(active?' chosen':'')});
+        add('text',{x:x2+(x2<x1?-6:6),y:mid-8,'text-anchor':x2<x1?'end':'start',class:'branch-label'},yes?'Yes':'No');
+      }
+      function draw(){
+        const d=Number(inactive.value),u=Number(usage.value),t=Number(tickets.value);
+        root.querySelector('#churn-inactive-value').textContent=d;
+        root.querySelector('#churn-usage-value').textContent=u;
+        root.querySelector('#churn-tickets-value').textContent=t;
+        const idle=d>14,follow=idle?u<=2:t>=2;
+        const leafIndex=idle?(follow?0:1):(follow?2:3);
+        const result=follow?'Churn':'No churn';
+        root.querySelector('#churn-result').textContent=result;root.dataset.prediction=result;
+        const width=Math.max(280,Math.round(root.getBoundingClientRect().width));
+        const narrow=width<580,height=narrow?300:338;
+        svg.setAttribute('viewBox','0 0 '+width+' '+height);svg.style.height=height+'px';svg.replaceChildren();
+        add('title',{id:'churn-tree-title'},'Illustrative churn decision tree');
+        add('desc',{id:'churn-tree-desc'},'Days since last activity '+d+'. Uses '+u+'. Tickets '+t+'. First decision '+(idle?'yes':'no')+'. Second decision '+(follow?'yes':'no')+'. Predicted class '+result+'. Thresholds are hand-set.');
+        if(narrow){
+          const x=width/2,w=Math.min(width-28,310);
+          edge(x,70,x,132,idle,true);edge(x,190,x,252,follow,true);
+          node(x,12,w,['Inactive for more than 14 days?'],true,false);
+          node(x,132,w,idle?['Uses in past 30 days','at most 2?']:['Unresolved tickets','at least 2?'],true,false);
+          node(x,252,w,[result],true,true);
+        }else{
+          const left=width/4,right=3*width/4,leaves=[width/8,3*width/8,5*width/8,7*width/8];
+          edge(width/2,72,left,143,true,idle);edge(width/2,72,right,143,false,!idle);
+          edge(left,201,leaves[0],280,true,leafIndex===0);edge(left,201,leaves[1],280,false,leafIndex===1);
+          edge(right,201,leaves[2],280,true,leafIndex===2);edge(right,201,leaves[3],280,false,leafIndex===3);
+          node(width/2,14,278,['Inactive for more than 14 days?'],true,false);
+          node(left,143,Math.min(width/2-28,244),['Uses in past 30 days','at most 2?'],idle,false);
+          node(right,143,Math.min(width/2-28,244),['Unresolved tickets','at least 2?'],!idle,false);
+          leaves.forEach((x,i)=>node(x,280,width/4-16,[i%2===0?'Churn':'No churn'],leafIndex===i,true));
+        }
+      }
+      [inactive,usage,tickets].forEach(input=>input.addEventListener('input',draw));
+      new ResizeObserver(draw).observe(root);draw();
+    })();
+  </script>
+</div>
+
+  </section>
+  <section class="project-section" id="translation-demo" aria-label="Translation demonstration">
+    <p class="demo-intro">Switch between the two sentences, then step through generation. The surrounding words help distinguish a riverbank from a financial bank. Word groups stand in for model tokens; the highlighted focus is illustrative and is not a measured attention pattern.</p>
+<div id="transformer-translation-example">
+  <style>
+    #transformer-translation-example { color: var(--foreground); }
+    #transformer-translation-example .translation-figure { margin: 20px 0 12px; display: grid; gap: 14px; }
+    #transformer-translation-example .source-groups { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 8px; }
+    #transformer-translation-example .source-word { display: inline-block; padding: 7px 10px; background: color-mix(in srgb, var(--viz-series-1) var(--focus), transparent); color: var(--foreground); }
+    #transformer-translation-example .context-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 16px; padding: 7px 0; }
+    #transformer-translation-example .encoder-label { font-weight: 500; }
+    #transformer-translation-example .decoder-output { margin: 8px 0 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; }
+    #transformer-translation-example .target-groups { display: inline-flex; flex-wrap: wrap; gap: 4px; align-items: baseline; }
+    #transformer-translation-example .target-prefix { color: var(--foreground); }
+    #transformer-translation-example .target-next { color: var(--foreground); background: color-mix(in srgb, var(--viz-series-1) 22%, transparent); padding: 3px 8px; }
+    #transformer-translation-example .generation-controls { margin-top: 12px; }
+    #transformer-translation-example .focus-legend { margin-top: 10px; }
+    #transformer-translation-example .focus-mark { display: inline-block; background: color-mix(in srgb, var(--viz-series-1) 45%, transparent); width: 12px; height: 12px; vertical-align: middle; margin-right: 6px; }
+  </style>
+  <h2>Transformer translation</h2>
+  <div class="text-small text-muted">English to Traditional Chinese · scripted outputs and attention cues</div>
+  <div class="viz-controls">
+    <label class="form-label" for="translation-sentence">Sentence context
+      <select class="form-select" id="translation-sentence">
+        <option value="river">He sat by the bank of the river.</option>
+        <option value="money">She went to the bank to deposit money.</option>
+      </select>
+    </label>
+  </div>
+  <figure class="translation-figure" aria-label="Illustrative encoder and decoder translation walkthrough">
+    <div><div class="text-small text-muted">Source word groups and illustrative decoder focus</div><div class="source-groups" id="translation-source"></div></div>
+    <div class="context-row"><span class="encoder-label">Encoder context for “bank”</span><span id="translation-meaning">river edge</span></div>
+    <hr>
+    <div>
+      <div class="viz-row"><span>Decoder output</span><span class="text-small text-muted tabular-nums" id="translation-step">Step 3 of 5</span></div>
+      <div class="decoder-output"><h3 class="target-groups" lang="zh-Hant"><span class="target-prefix" id="translation-prefix">他坐在</span><span class="target-next" id="translation-next">河岸</span></h3><span class="text-small" id="translation-gloss">Next: riverbank</span></div>
+    </div>
+  </figure>
+  <div class="viz-row generation-controls"><button type="button" class="btn" id="translation-back">Previous step</button><button type="button" class="btn btn-primary" id="translation-forward">Generate next word group</button></div>
+  <div class="focus-legend text-small text-muted"><span class="focus-mark" aria-hidden="true"></span>Darker source words = stronger scripted focus for the next word group</div>
+  <div class="sr-only" aria-live="polite" aria-atomic="true" id="translation-announcement"></div>
+  <script>
+    (()=>{
+      const root=document.getElementById('transformer-translation-example');
+      const cases={
+        river:{source:['He','sat','by','the','bank','of','the','river','.'],target:['他','坐在','河岸','邊','。'],gloss:['he','sat','riverbank','beside','sentence end'],meaning:'river edge · 河岸',focus:[[.95,.06,.03,.02,.03,.02,.02,.03,.01],[.13,.91,.54,.03,.06,.02,.02,.05,.01],[.02,.10,.12,.04,.96,.12,.07,.94,.01],[.02,.13,.83,.05,.46,.29,.05,.43,.01],[.01,.01,.01,.01,.01,.01,.01,.01,.97]]},
+        money:{source:['She','went','to','the','bank','to','deposit','money','.'],target:['她','去','銀行','存錢','。'],gloss:['she','went','financial bank','deposit money','sentence end'],meaning:'financial institution · 銀行',focus:[[.95,.05,.03,.02,.03,.02,.02,.03,.01],[.12,.93,.61,.03,.12,.06,.04,.03,.01],[.02,.07,.07,.04,.94,.09,.86,.89,.01],[.03,.05,.07,.02,.46,.34,.96,.91,.01],[.01,.01,.01,.01,.01,.01,.01,.01,.97]]}
+      };
+      const selector=root.querySelector('#translation-sentence'),back=root.querySelector('#translation-back'),forward=root.querySelector('#translation-forward');
+      let emitted=2;
+      function draw(){
+        const data=cases[selector.value],complete=emitted===data.target.length;
+        const focus=complete?data.source.map(()=>0):data.focus[emitted];
+        const words=root.querySelector('#translation-source');words.replaceChildren();
+        data.source.forEach((word,i)=>{const span=document.createElement('span');span.className='source-word';span.textContent=word;span.style.setProperty('--focus',(4+focus[i]*48).toFixed(1)+'%');words.appendChild(span);});
+        root.querySelector('#translation-meaning').textContent=data.meaning;
+        const prefix=data.target.slice(0,emitted).join('');
+        root.querySelector('#translation-prefix').textContent=prefix||'〈開始〉';
+        const next=root.querySelector('#translation-next');next.textContent=complete?'':data.target[emitted];next.hidden=complete;
+        root.querySelector('#translation-gloss').textContent=complete?'Translation complete':'Next: '+data.gloss[emitted];
+        root.querySelector('#translation-step').textContent=complete?'Complete · 5 of 5':'Step '+(emitted+1)+' of 5';
+        back.disabled=emitted===0;forward.disabled=complete;root.dataset.context=selector.value;root.dataset.emitted=String(emitted);
+        root.querySelector('#translation-announcement').textContent='Context: '+data.meaning+'. Generated prefix: '+prefix+'. '+(complete?'Translation complete.':'Next word group: '+data.target[emitted]+', '+data.gloss[emitted]+'.');
+      }
+      selector.addEventListener('change',()=>{emitted=2;draw();});
+      back.addEventListener('click',()=>{emitted=Math.max(0,emitted-1);draw();});
+      forward.addEventListener('click',()=>{emitted=Math.min(5,emitted+1);draw();});draw();
+    })();
+  </script>
+</div>
+
+  </section>
+  <section class="project-section project-notes" id="project-notes">
+    <h2>Project notes</h2>
+    <p><strong>Purpose and audience:</strong> This artifact translates an academic comparison of machine learning and deep learning into examples that employers and business analysts can explore without reading model code or interpreting a benchmark.</p>
+    <p><strong>Skills demonstrated:</strong> AI/ML conceptual understanding, research synthesis, explanation of model behavior, and adaptation of technical material for a professional audience.</p>
+    <p><strong>Connection to the paper:</strong> The decision tree complements the paper’s discussion of conventional classifiers by making a classification path visible. It does not reproduce the paper’s SVM. The translation walkthrough illustrates contextual interpretation and sequential generation.</p>
+    <p><strong>Limitations:</strong> The churn rules and 30-day prediction horizon are teaching assumptions with no validated predictive accuracy. The translation walkthrough supports two preset sentences and does not translate arbitrary text. These examples demonstrate inference concepts rather than model training or deployment.</p>
+    <p><strong>AI assistance:</strong> ChatGPT helped adapt the explanations and generate the demonstration code. The code and presentation are AI-assisted; the examples do not establish original model-training results.</p>
+    <h3>Sources</h3>
+    <ul class="project-sources">
+      <li>scikit-learn. <a href="https://scikit-learn.org/stable/modules/tree.html">Decision trees</a>. Documentation explaining supervised decision-tree classification and prediction.</li>
+      <li>Vaswani, A., et al. (2017). <a href="https://arxiv.org/abs/1706.03762">Attention is all you need</a>. The original Transformer research paper.</li>
+    </ul>
+  </section>
+  <noscript><p>These demonstrations need JavaScript to update their outputs. The project notes describe their scope and limitations.</p></noscript>
+</main>
+<footer class="project-footer"><div class="shell"><p>Yu-Hsuan Tseng · AIML-500 Machine Learning Fundamentals · <a href="index.html#workshops">Portfolio artifacts</a></p></div></footer>
+
+</body>
+</html>
