@@ -28,7 +28,7 @@ Examines Transformer-based neural networks and their ability to learn contextual
 
 The paper also evaluates trade-offs in data requirements, computational resources, interpretability, and predictive performance.
 
-**Artifact:** [View Research Paper](./Machine Learning vs. Deep Learning.pdf)
+**Artifact:** [View Research Paper](./Machine%20Learning%20vs.%20Deep%20Learning.pdf)
 
 ### 2. Infographic — Choosing the Right Approach
 
@@ -42,7 +42,7 @@ The infographic highlights:
 - A five-step framework for selecting an appropriate analytical approach.
 - The importance of evidence-based model evaluation.
 
-**Artifact:** [View Infographic](./Machine Learning vs. Deep Learning Infographic.png)
+**Artifact:** [View Infographic](./Machine%20Learning%20vs.%20Deep%20Learning%20Infographic.png)
 
 ### 3. Interactive Simulation — Customer Churn Classifier
 
