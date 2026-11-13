@@ -3,244 +3,155 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="An interactive AIML-500 guide to choosing a training method and following a neural network weight update.">
-  <title>Which Training Method Fits? | Sunny’s AI &amp; ML Portfolio</title>
+  <meta name="description" content="An AIML-500 case study on training a neural network to predict survey panel inactivity.">
+  <title>Predicting Survey Panel Inactivity | Sunny’s AI &amp; ML Portfolio</title>
   <style>
     :root {
       --navy: #14263b;
-      --navy-light: #213b55;
-      --aqua: #86d4df;
       --ink: #203044;
-      --muted: #536579;
-      --line: #dbe4eb;
-      --page: #f5f8fa;
+      --muted: #52657a;
       --teal: #185767;
-      --teal-light: #edf8f9;
+      --aqua: #86d4df;
+      --page: #f5f8fa;
+      --line: #d9e3eb;
     }
     * { box-sizing: border-box; }
     [hidden] { display: none !important; }
     body {
       margin: 0;
-      background: var(--page);
       color: var(--ink);
+      background: var(--page);
       font: 1rem/1.6 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
     h1, h2, h3, p { margin: 0; }
-    h1, h2, h3, legend { line-height: 1.2; }
-    h2 { font-size: clamp(1.45rem, 3.5vw, 2rem); letter-spacing: -.025em; }
-    h3, legend { font-size: 1.2rem; font-weight: 730; }
+    h1, h2, h3 { line-height: 1.2; letter-spacing: -.025em; }
+    h2 { font-size: clamp(1.45rem, 3vw, 2rem); }
+    h3 { font-size: 1.1rem; }
     a { color: #165f7d; text-underline-offset: .2em; }
-    :focus-visible { outline: 3px solid #007d91; outline-offset: 4px; }
-    button, input { font: inherit; }
-    button { cursor: pointer; }
-    button:disabled { cursor: default; }
-    button, a { -webkit-tap-highlight-color: transparent; }
+    :focus-visible { outline: 3px solid #007b91; outline-offset: 4px; }
     .shell { width: min(100% - 48px, 1040px); margin-inline: auto; }
-    .site-header, .hero { background: var(--navy); color: white; }
+    .site-header, .hero, footer { background: var(--navy); color: white; }
     .site-header { border-bottom: 1px solid #3c5064; }
     .header-row {
-      min-height: 64px;
+      min-height: 62px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
+      flex-wrap: wrap;
+      gap: 6px 16px;
+      padding-block: 8px;
     }
     .header-row a { color: #e5eff4; font-weight: 670; font-size: .9rem; }
     .header-row .brand { color: white; text-decoration: none; }
-    .hero { padding: clamp(32px, 6vw, 66px) 0; }
-    .kicker {
+    .header-row a:focus-visible { outline-color: var(--aqua); }
+    .hero { padding: clamp(34px, 6vw, 68px) 0; }
+    .course {
       color: var(--aqua);
-      font-weight: 750;
+      font-weight: 730;
       font-size: .82rem;
-      letter-spacing: .1em;
+      letter-spacing: .09em;
       text-transform: uppercase;
     }
     .hero h1 {
-      margin-block: 12px;
-      font-size: clamp(2.05rem, 5.6vw, 4rem);
-      letter-spacing: -.05em;
+      margin: 11px 0 12px;
+      font-size: clamp(2.2rem, 5.5vw, 3.8rem);
+      letter-spacing: -.045em;
     }
-    .hero p:last-child { max-width: 65ch; color: #dce8f0; font-size: clamp(1rem, 2vw, 1.15rem); }
-    .site-header :focus-visible { outline-color: var(--aqua); }
-    .cases { padding-block: clamp(24px, 4vw, 44px); }
-    .case-picker, .panel-picker { display: grid; gap: 8px; }
-    .case-picker { grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 15px 0 18px; }
-    .panel-picker { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-bottom: 14px; }
-    .choice-button {
-      min-height: 44px;
-      border: 1px solid #bfced8;
-      border-radius: 9px;
-      padding: 8px 12px;
-      background: white;
-      color: var(--ink);
-      font-weight: 680;
-      line-height: 1.25;
-      text-align: center;
-    }
-    .choice-button:hover { border-color: #458295; background: var(--teal-light); }
-    .choice-button[aria-pressed="true"] {
-      border-color: var(--navy-light);
-      background: var(--navy-light);
-      color: white;
-    }
-    .scenario-layout { display: grid; grid-template-columns: 1.06fr 1fr; gap: 14px; }
-    .card {
-      background: white;
+    .hero p:last-child { max-width: 62ch; color: #dce8f0; font-size: clamp(1rem, 2vw, 1.13rem); }
+    .content { display: grid; gap: clamp(24px, 4vw, 38px); padding-block: clamp(25px, 4vw, 43px); }
+    .intro p { max-width: 83ch; margin-top: 8px; }
+    .window, .demo-grid, .evaluation { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .window {
+      margin-top: 15px;
       border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: clamp(16px, 2.7vw, 25px);
+      border-radius: 12px;
+      background: white;
     }
-    .scenario {
-      display: flex;
-      flex-direction: column;
-      align-items: start;
-      background: linear-gradient(145deg, #fff 45%, #eef7f8);
+    .window > div, .evaluation > div { padding: 14px 17px; }
+    .window > div + div { border-left: 1px solid var(--line); }
+    .window p, .evaluation p { margin-top: 5px; color: var(--muted); font-size: .94rem; }
+    .demo {
+      padding: clamp(16px, 3vw, 28px);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: white;
+      box-shadow: 0 8px 28px rgb(20 38 59 / 5%);
     }
-    .scenario h3, .lab h3 { font-size: clamp(1.25rem, 3vw, 1.65rem); letter-spacing: -.02em; }
-    .scenario p, .lab > p { margin-top: 8px; }
-    .evidence { margin: 18px 0 0; }
-    .evidence dt { font-weight: 720; }
-    .evidence dd { margin: 4px 0 0; color: var(--muted); }
-    fieldset { min-width: 0; margin: 0 0 14px; padding: 0; border: 0; }
-    legend { padding: 0; margin-bottom: 10px; }
-    .option {
+    .demo > p, .model > p { margin-top: 8px; }
+    .demo-grid { align-items: start; gap: 16px; margin-top: 17px; }
+    .record, .model { min-width: 0; border-radius: 12px; padding: clamp(13px, 2vw, 18px); }
+    .record { border: 1px solid var(--line); background: var(--page); }
+    .model { border: 1px solid #c9e2e6; background: #edf8f9; }
+    .record fieldset { min-width: 0; padding: 0; border: 0; margin: 0; }
+    .record legend { font-weight: 730; padding: 0; }
+    .record-options { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 7px; }
+    .record-options label {
       display: flex;
       align-items: center;
-      gap: 9px;
+      gap: 6px;
       min-height: 42px;
+      border: 1px solid #b9cbd7;
+      border-radius: 7px;
       padding: 5px 10px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
+      background: white;
+      font-size: .92rem;
       cursor: pointer;
     }
-    .option + .option { margin-top: 5px; }
-    .option:hover, .option:has(input:checked) { border-color: #5d8e9d; background: var(--teal-light); }
-    .option input, input[type="range"] { accent-color: var(--teal); }
-    .primary, .secondary {
-      min-height: 44px;
-      border: 1px solid var(--teal);
-      border-radius: 8px;
-      padding: 7px 14px;
-      font-weight: 720;
-    }
-    .primary { background: var(--teal); color: white; }
-    .primary:hover { background: #104653; }
-    .primary:disabled { border-color: #b6ccd1; background: #e2eff0; color: #405962; }
-    .secondary { background: white; color: var(--teal); }
-    .secondary:hover { background: var(--teal-light); }
-    .feedback { margin-top: 12px; }
-    .feedback:not(:empty) {
-      border-left: 3px solid #438397;
-      border-radius: 0 8px 8px 0;
-      background: var(--teal-light);
-      padding: 12px 15px;
-    }
-    .feedback[data-result="review"] { border-color: #a76b27; background: #fff7e9; }
-    .feedback p + p { margin-top: 5px; }
-    .lab { margin-top: 17px; }
-    .lab > p, .muted { color: var(--muted); }
-    .lab .body-text { color: var(--ink); }
-    .lab-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
-      align-items: start;
-      gap: 17px;
-      margin-block: 17px;
-    }
-    .inset { background: var(--page); border: 1px solid var(--line); border-radius: 10px; padding: 13px; }
-    .inset h4 { margin: 0 0 8px; font-size: 1rem; }
-    .data-list { display: grid; gap: 5px; margin: 0; font-size: .92rem; }
-    .data-list div { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
-    .data-list dd { margin: 0; text-align: right; font-weight: 710; }
-    .metrics { display: grid; gap: 8px; margin: 0; }
-    .metric {
+    .record-options label:has(input:checked) { border-color: #417a89; background: #e5f4f6; }
+    .record-options input { margin: 0; accent-color: var(--teal); }
+    .signals, .metrics { margin: 12px 0 0; }
+    .signals > div, .metrics > div {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
       flex-wrap: wrap;
       gap: 2px 10px;
-      border: 1px solid var(--line);
-      border-radius: 9px;
-      padding: 9px 12px;
+      border-bottom: 1px solid var(--line);
+      padding: 6px 0;
+      font-size: .91rem;
     }
-    .metric dt { font-size: .9rem; }
-    .metric dd { margin: 0; color: var(--teal); font-weight: 760; font-variant-numeric: tabular-nums; }
-    .controls { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
-    .status:empty { margin: 0; }
-    .status:not(:empty) { margin-top: 8px; }
-    details { margin-top: 12px; }
-    summary { cursor: pointer; color: var(--teal); font-weight: 720; }
-    details > p, details ol { margin: 7px 0 0; }
-    details ol { padding-left: 1.4em; }
+    .signals > div:last-child, .metrics > div:last-child { border: 0; }
+    dd { margin: 0; }
+    .signals dd, .metrics dd, .score strong { font-weight: 730; font-variant-numeric: tabular-nums; }
+    .model p, .result { font-size: .94rem; }
+    .scores { display: grid; gap: 7px; margin: 13px 0 0; }
+    .score { display: grid; gap: 3px; }
+    .score-label { display: flex; justify-content: space-between; gap: 8px; font-size: .89rem; }
+    .bar { display: block; width: 100%; height: 8px; border-radius: 99px; background: #d6e7eb; }
+    .bar-fill { display: block; height: 100%; border-radius: inherit; background: #347d8a; }
+    #bar-before { background: #506e83; }
+    .train-button {
+      min-height: 44px;
+      border: 1px solid var(--teal);
+      border-radius: 8px;
+      padding: 7px 13px;
+      margin-top: 14px;
+      background: var(--teal);
+      color: white;
+      font: inherit;
+      font-weight: 710;
+      cursor: pointer;
+    }
+    .train-button:hover { background: #104653; }
+    .result:not(:empty) { margin-top: 9px; }
+    details { margin-top: 15px; }
+    summary { cursor: pointer; color: var(--teal); font-weight: 730; }
+    details ol, details ul { margin: 8px 0 0; padding-left: 1.5em; }
+    details p { margin-top: 7px; }
     details li + li { margin-top: 5px; }
-    .numerical { font-variant-numeric: tabular-nums; }
-    .scatter-figure { margin: 0; }
-    .scatter-figure figcaption { margin-bottom: 7px; font-size: .88rem; font-weight: 680; }
-    .scatter {
-      position: relative;
-      min-height: 150px;
-      border-bottom: 2px solid #536579;
-      border-left: 2px solid #536579;
-      background: repeating-linear-gradient(to top, transparent 0 29px, #e8eef1 29px 30px), #fbfdfe;
-    }
-    .point {
-      position: absolute;
-      translate: -50% 50%;
-      display: grid;
-      place-items: center;
-      width: 15px;
-      height: 15px;
-      border-radius: 50%;
-      background: #4d677b;
-      color: transparent;
-      font-size: .6rem;
-      font-weight: 760;
-    }
-    .grouped .point { color: white; }
-    .grouped .point-a { background: #126275; }
-    .grouped .point-b { background: #6e4380; }
-    .grouped .point-c { background: #925324; }
-    .axis-x { margin-top: 3px; text-align: center; font-size: .88rem; font-weight: 680; }
-    .maze { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; max-width: 320px; }
-    .maze span {
-      display: grid;
-      place-items: center;
-      aspect-ratio: 1;
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      background: #f7f9fa;
-      color: var(--ink);
-      font-size: .82rem;
-      font-weight: 740;
-    }
-    .maze .route { border-color: #5b9aaa; background: #dcf2f5; }
-    .maze .wall { border-color: var(--navy-light); background: var(--navy-light); }
-    .range-label { display: block; margin-top: 12px; font-weight: 680; }
-    input[type="range"] { width: min(100%, 240px); margin: 6px 0 0; }
-    .route-totals { margin-top: 6px; font-variant-numeric: tabular-nums; }
-    .maze-key { margin-top: 5px; color: var(--muted); font-size: .85rem; }
-    .sequence { width: 100%; margin: 12px 0; border-collapse: collapse; font-size: .88rem; }
-    .sequence caption { text-align: left; font-weight: 720; margin-bottom: 5px; }
-    .sequence th, .sequence td { padding: 6px; border-bottom: 1px solid var(--line); text-align: center; }
-    .sequence th:first-child { text-align: left; }
-    .sequence thead { background: var(--page); }
-    .case-footer { display: flex; justify-content: end; margin-top: 14px; }
-    .course-notes { padding-bottom: 30px; }
-    .course-notes details { margin: 0; }
-    .course-notes dl { margin: 10px 0 0; }
-    .course-notes dt { font-weight: 720; }
-    .course-notes dd { margin: 0 0 7px; }
-    .sources { margin: 10px 0 0; padding-left: 20px; }
-    footer { background: var(--navy); color: #dce8f0; padding: 20px 0; font-size: .88rem; }
-    @media (max-width: 700px) {
+    code { overflow-wrap: anywhere; }
+    .evaluation { gap: 10px; margin-top: 12px; }
+    .evaluation > div { border: 1px solid var(--line); border-radius: 10px; background: white; }
+    .notes { border-top: 1px solid var(--line); padding-top: 14px; }
+    .notes > details { margin-top: 10px; }
+    .notes dl { margin: 8px 0 0; }
+    .notes dt { font-weight: 730; }
+    .notes dd { margin-bottom: 7px; }
+    footer { padding: 17px 0; font-size: .87rem; color: #dce8f0; }
+    @media (max-width: 680px) {
       .shell { width: calc(100% - 32px); }
-      .case-picker { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .scenario-layout, .lab-grid { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 400px) {
-      .header-row { gap: 8px; }
-      .header-row a { font-size: .8rem; }
-      .panel-picker { grid-template-columns: 1fr; }
+      .window, .demo-grid, .evaluation { grid-template-columns: minmax(0, 1fr); }
+      .window > div + div { border-left: 0; border-top: 1px solid var(--line); }
     }
   </style>
 </head>
@@ -254,418 +165,198 @@
   <main>
     <section class="hero" aria-labelledby="page-title">
       <div class="shell">
-        <p class="kicker">AIML-500 · Workshop 3</p>
-        <h1 id="page-title">Which Training Method Fits?</h1>
-        <p>Choose a training method for each case. Run one neural network weight update, then apply the same reasoning to a survey panel.</p>
+        <p class="course">AIML-500 · Workshop 3</p>
+        <h1 id="page-title">Predicting Survey Panel Inactivity</h1>
+        <p>Which active panel members might go the next 10 weeks without completing a survey? Follow one neural-network training step to see how historical outcomes can help answer that question.</p>
       </div>
     </section>
 
-    <section class="shell cases" aria-labelledby="case-heading">
-      <h2 id="case-heading" tabindex="-1">Explore the cases</h2>
-      <noscript><p>Enable JavaScript to check your choices and run the demonstrations. The course notes and sources below are available on their own.</p></noscript>
-      <div id="guide" hidden>
-        <div class="case-picker" role="group" aria-label="Case">
-          <button class="choice-button" type="button" data-case="fraud" aria-pressed="true">Fraud detection</button>
-          <button class="choice-button" type="button" data-case="segments" aria-pressed="false">Customer segmentation</button>
-          <button class="choice-button" type="button" data-case="maze" aria-pressed="false">Maze navigation</button>
-          <button class="choice-button" type="button" data-case="panel" aria-pressed="false">Survey panel challenge</button>
+    <div class="shell content">
+      <section class="intro" aria-labelledby="problem-title">
+        <h2 id="problem-title">Define the prediction</h2>
+        <p>The research team wants to prioritize which members to check in with. <strong>Supervised learning</strong> fits this question because earlier records contain both a snapshot of member activity and the outcome that followed.</p>
+        <div class="window">
+          <div>
+            <h3>At the prediction date</h3>
+            <p>Use information already available, such as how recently the member completed a survey and how often they responded to recent invitations.</p>
+          </div>
+          <div>
+            <h3>Over the next 10 weeks</h3>
+            <p>Assign label 1 if the member completes zero surveys and label 0 if they complete at least one. Use records with a full, observed follow-up window for this example.</p>
+          </div>
         </div>
-        <div class="panel-picker" id="panel-picker" role="group" aria-label="Survey panel task" hidden>
-          <button class="choice-button" type="button" data-panel="predict" aria-pressed="true">Predict completions</button>
-          <button class="choice-button" type="button" data-panel="group" aria-pressed="false">Find engagement groups</button>
-          <button class="choice-button" type="button" data-panel="reminders" aria-pressed="false">Choose reminder timing</button>
-        </div>
-        <div class="scenario-layout">
-          <section class="card scenario" aria-labelledby="scenario-title">
-            <h3 id="scenario-title"></h3>
-            <p id="scenario-goal"></p>
-            <dl class="evidence">
-              <dt>Available evidence</dt>
-              <dd id="scenario-evidence"></dd>
-            </dl>
-          </section>
-          <form class="card" id="method-form">
-            <fieldset>
-              <legend>Choose a training method</legend>
-              <label class="option"><input type="radio" name="method" value="supervised" required> Supervised learning</label>
-              <label class="option"><input type="radio" name="method" value="unsupervised"> Unsupervised learning</label>
-              <label class="option"><input type="radio" name="method" value="reinforcement"> Reinforcement learning</label>
-            </fieldset>
-            <button class="primary" type="submit">Check my choice</button>
-          </form>
-        </div>
-        <div class="feedback" id="feedback" role="status"></div>
+      </section>
 
-        <section class="card lab" id="fraud-lab" aria-labelledby="fraud-lab-title">
-          <h3 id="fraud-lab-title">Train one neuron</h3>
-          <p>The neuron multiplies each input by a weight, adds a bias, and applies a <strong>sigmoid activation</strong> to turn the sum into a score between 0 and 1. The confirmed outcome tells it which direction to adjust.</p>
-          <div class="lab-grid">
-            <div class="inset">
-              <h4>Example transaction</h4>
-              <dl class="data-list">
-                <div><dt>Amount signal, scaled 0 to 1</dt><dd>0.60</dd></div>
-                <div><dt>Unfamiliar device</dt><dd>Yes (1)</dd></div>
-                <div><dt>Confirmed outcome</dt><dd>Fraud (1)</dd></div>
-              </dl>
+      <section class="demo" aria-labelledby="demo-title">
+        <h2 id="demo-title">Train the network on one record</h2>
+        <p>These two fictional panelists have the same inputs. Each run starts with the same weights so you can see how the observed outcome changes the update.</p>
+        <noscript><p>In this example, the starting score is 50.5%. One weight update raises it to 54.1% for a member with zero completions and lowers it to 46.9% for a member who completed a survey.</p></noscript>
+        <div class="demo-grid" id="demo-controls" hidden>
+          <div class="record">
+            <fieldset>
+              <legend>Choose a training record</legend>
+              <div class="record-options">
+                <label><input type="radio" name="record" value="1" checked> Panelist A</label>
+                <label><input type="radio" name="record" value="0"> Panelist B</label>
+              </div>
+            </fieldset>
+            <dl class="signals">
+              <div><dt>Days since last completion</dt><dd>14 days</dd></div>
+              <div><dt>Recent invitations unanswered</dt><dd>4 out of 5</dd></div>
+              <div><dt>Observed outcome</dt><dd id="outcome">Revealed during training</dd></div>
+            </dl>
+            <button class="train-button" id="train" type="button">Run one training step</button>
+          </div>
+
+          <div class="model">
+            <h3>Predicted inactivity score</h3>
+            <p>One hidden neuron combines the inputs and applies ReLU. The output neuron uses a sigmoid to turn its result into a score between 0 and 1.</p>
+            <div class="scores">
+              <div class="score">
+                <span class="score-label">Before training <strong id="score-before"></strong></span>
+                <span class="bar" aria-hidden="true"><span class="bar-fill" id="bar-before"></span></span>
+              </div>
+              <div class="score" id="updated-score" hidden>
+                <span class="score-label">After one update <strong id="score-after"></strong></span>
+                <span class="bar" aria-hidden="true"><span class="bar-fill" id="bar-after"></span></span>
+              </div>
             </div>
             <dl class="metrics">
-              <div class="metric"><dt>Model’s fraud score</dt><dd id="fraud-score"></dd></div>
-              <div class="metric"><dt>Unfamiliar-device weight</dt><dd id="device-weight"></dd></div>
+              <div><dt>Weight on days since last completion</dt><dd id="recency-weight"></dd></div>
+              <div id="loss-row" hidden><dt>Training loss</dt><dd id="loss"></dd></div>
             </dl>
           </div>
-          <div class="controls">
-            <button class="primary" id="train-fraud" type="button">Run one training step</button>
-            <button class="secondary" id="reset-fraud" type="button" hidden>Reset step</button>
-          </div>
-          <p class="status body-text" id="fraud-status" role="status"></p>
-          <details>
-            <summary>See the calculation</summary>
-            <ol class="numerical">
-              <li>Multiply each input by its starting weight and add the bias. The sum is (0.60 × 0.50) + (1 × 0.20) − 0.90 = −0.40.</li>
-              <li>Apply the sigmoid <code>1 / (1 + exp(−sum))</code>. The starting score is approximately <span id="math-score"></span>.</li>
-              <li>For binary cross-entropy loss, the gradient for the device weight is <code>(score − label) × device input</code>. With a learning rate of 0.50, subtract half the gradient from the starting weight to get approximately <span id="math-weight"></span>.</li>
-              <li>Keep the amount weight and bias fixed. Recompute the score with the updated device weight to get approximately <span id="math-updated-score"></span>.</li>
-            </ol>
-          </details>
-        </section>
-
-        <section class="card lab" id="segments-lab" aria-labelledby="segments-lab-title" hidden>
-          <h3 id="segments-lab-title">Find patterns in purchase behavior</h3>
-          <p>Each dot represents a fictional customer. Inspect the distribution, then reveal one possible way to group them.</p>
-          <div class="lab-grid">
-            <figure class="scatter-figure">
-              <figcaption>Average order value ($0–$120)</figcaption>
-              <div class="scatter" id="scatter" role="img" aria-label="Scatter plot of twelve customers by orders per month and average order value"></div>
-              <p class="axis-x">Orders per month (0–12)</p>
-            </figure>
-            <div>
-              <button class="secondary" id="group-toggle" type="button" aria-pressed="false">Show example groups</button>
-              <p class="status" id="group-status" role="status"></p>
-            </div>
-          </div>
-        </section>
-
-        <section class="card lab" id="maze-lab" aria-labelledby="maze-lab-title" hidden>
-          <h3 id="maze-lab-title">See how rewards shape a route</h3>
-          <p>Each move costs 1 point. Reaching the exit earns 10 points, and a checkpoint earns a bonus once. Change the bonus and compare the two routes.</p>
-          <div class="lab-grid">
-            <div>
-              <div class="maze" id="maze-grid" role="img"></div>
-              <p class="maze-key">S = Start · C = Checkpoint · E = Exit · Dark cells = walls</p>
-            </div>
-            <div>
-              <div class="controls" role="group" aria-label="Route to highlight">
-                <button class="choice-button" type="button" data-route="direct" aria-pressed="true">Direct route</button>
-                <button class="choice-button" type="button" data-route="detour" aria-pressed="false">Checkpoint route</button>
-              </div>
-              <label class="range-label" for="checkpoint">Checkpoint bonus (<output id="bonus-value" for="checkpoint">2</output> points)</label>
-              <input type="range" id="checkpoint" min="0" max="8" value="2" step="1">
-              <p class="route-totals" id="route-totals" role="status"></p>
-            </div>
-          </div>
-        </section>
-
-        <section class="card lab" id="panel-lab" aria-labelledby="panel-lab-title" hidden>
-          <h3 id="panel-lab-title">What the weekly total hides</h3>
-          <p>Both fictional members completed three surveys in week one. The order of their activity gives the panel team more information to work with.</p>
-          <table class="sequence">
-            <caption>Week-one survey completions</caption>
-            <thead><tr><th scope="col">Member</th><th scope="col">Days 1–2</th><th scope="col">Days 3–4</th><th scope="col">Days 5–7</th></tr></thead>
-            <tbody>
-              <tr><th scope="row">Member A</th><td>2</td><td>1</td><td>0</td></tr>
-              <tr><th scope="row">Member B</th><td>0</td><td>1</td><td>2</td></tr>
-            </tbody>
-          </table>
-          <p>A recurrent neural network can process activity in order and carry information forward between time steps. To predict week-two completion, test whether this adds value over a baseline that uses the most recent completion date.</p>
-        </section>
-
-        <div class="case-footer"><button class="secondary" type="button" id="next-case">Next case →</button></div>
-      </div>
-    </section>
-
-    <section class="shell course-notes" aria-label="Workshop notes and sources">
-      <div class="card">
+        </div>
+        <p class="result" id="result" role="status"></p>
         <details>
-          <summary>Workshop notes and sources</summary>
-          <p>The case decisions adapt the fraud, segmentation, and maze scenarios from <strong>3.3 AI Training Interaction</strong>. The weight update and network examples apply <strong>3.2 Neural Networks</strong>. The survey panel challenge uses fictional records and simulated feedback.</p>
-          <p>A training method describes what the model learns from, such as labels or rewards. A network architecture describes how the model processes its inputs. One architecture can learn from different kinds of feedback.</p>
+          <summary>See how the weight update works</summary>
+          <ol>
+            <li><strong>Forward pass.</strong> Scale the inputs to 0.50 (14 ÷ 28 days) and 0.80 (4 ÷ 5 invitations). The hidden neuron adds the weighted inputs and bias, giving <code>(0.50 × 0.60) + (0.80 × 0.50) − 0.10 = 0.60</code>. ReLU keeps this positive value. The output applies sigmoid to <code>(1.20 × 0.60) − 0.70</code>, producing the initial score of about 0.505.</li>
+            <li><strong>Loss and backpropagation.</strong> Binary cross-entropy measures how far the score is from the recorded outcome. Backpropagation calculates how changing the recency weight would change the loss. Here its gradient is <code>(score − label) × 1.20 × 1 × 0.50</code>. The 1 is the slope of ReLU at the positive input.</li>
+            <li><strong>Gradient descent.</strong> Subtract 0.80 times the gradient from the recency weight and run the same inputs through the network again. The demo holds the other parameters fixed so you can trace the effect of changing one weight. <span id="calculation-result"></span></li>
+          </ol>
+        </details>
+      </section>
+
+      <section aria-labelledby="evaluation-title">
+        <h2 id="evaluation-title">Test the model before using it</h2>
+        <div class="evaluation">
+          <div>
+            <h3>Does the score improve on a simple rule?</h3>
+            <p>Compare the model with a rule based on days since last completion. Use a later cohort held out from training. At the same review capacity, compare how many future inactive members each approach catches and how many of its flags are correct. Check whether flagged members received enough invitations to participate.</p>
+          </div>
+          <div>
+            <h3>Does a check-in change participation?</h3>
+            <p>Randomly assign eligible flagged members to a check-in or the usual contact schedule. Compare completions and opt-outs to see whether extra outreach increases participation and whether it increases opt-outs.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="notes" aria-label="Course connections and sources">
+        <p>This case builds on a survey-panel practice question explored with the AI coach for <strong>3.3 AI Training Interaction</strong>. The worked example applies the network training concepts from <strong>3.2 Neural Networks</strong>.</p>
+        <details>
+          <summary>How the training method changes with the question</summary>
           <dl>
-            <dt>Artificial neural network (ANN)</dt>
-            <dd>Connected units use weights and activation functions to transform inputs. Training updates the weights to improve the model against its objective.</dd>
-            <dt>Convolutional neural network (CNN)</dt>
-            <dd>A filter can look for the same local pattern across an image, such as an edge in a survey screenshot.</dd>
-            <dt>Recurrent neural network (RNN)</dt>
-            <dd>A model can carry information from one step of an ordered sequence to the next, as in the panel example.</dd>
-            <dt>Generative adversarial network (GAN)</dt>
-            <dd>A generator makes synthetic examples and a discriminator learns to distinguish generated examples from real ones. Before using generated survey data for reporting, check whether it represents the groups and patterns the report needs.</dd>
+            <dt>Predict inactivity from confirmed outcomes</dt>
+            <dd>Supervised learning uses the 10-week outcomes as labels. A neural network is one model that can learn from those labels.</dd>
+            <dt>Discover patterns in engagement</dt>
+            <dd>Unsupervised learning can group members by activity when the team has no predefined group labels.</dd>
+            <dt>Learn a sequence of reminder decisions</dt>
+            <dd>Reinforcement learning would need a setting where an agent can choose actions and receive feedback, such as a simulation that rewards completions and penalizes opt-outs.</dd>
           </dl>
-          <ul class="sources">
+        </details>
+        <details>
+          <summary>References</summary>
+          <ul>
             <li><a href="https://developer.ibm.com/articles/cc-beginner-guide-machine-learning-ai-cognitive/">IBM Developer, A beginner’s guide to artificial intelligence and machine learning</a></li>
             <li><a href="https://developers.google.com/machine-learning/crash-course/neural-networks/activation-functions">Google Machine Learning Crash Course, Activation functions</a></li>
+            <li><a href="https://developers.google.com/machine-learning/crash-course/neural-networks/backpropagation">Google Machine Learning Crash Course, Training using backpropagation</a></li>
           </ul>
         </details>
-      </div>
-    </section>
+      </section>
+    </div>
   </main>
   <footer><div class="shell">Sunny · AIML-500 Machine Learning Fundamentals · Professional Portfolio Artifact 3</div></footer>
 
   <script>
     const byId = (id) => document.getElementById(id);
-    const methods = {
-      supervised: "Supervised learning",
-      unsupervised: "Unsupervised learning",
-      reinforcement: "Reinforcement learning",
-    };
-    const scenarios = {
-      fraud: {
-        title: "Flag potentially fraudulent payments",
-        goal: "A payments team wants to identify new transactions that may need review.",
-        evidence: "Each historical transaction has a confirmed outcome of fraudulent or legitimate.",
-        method: "supervised",
-        reason: "Each confirmed outcome is a label. The model uses it to measure prediction error and adjust its weights.",
-        evaluation: "On later transactions held out for testing, count both the confirmed frauds caught and the legitimate payments flagged.",
-      },
-      segments: {
-        title: "Discover customer groups",
-        goal: "A retail team wants to find useful customer segments from purchasing behavior.",
-        evidence: "You have order frequency and average order value for each customer. The records come without segment labels.",
-        method: "unsupervised",
-        reason: "Clustering can group customers with similar purchase behavior. Analysts can inspect and describe the groups after the model finds them.",
-        evaluation: "Check whether similar groups appear in another sample and whether each group supports a decision, such as which offer to test.",
-      },
-      maze: {
-        title: "Teach a robot to reach the exit",
-        goal: "A robot starts in a maze and learns which moves to make through repeated attempts.",
-        evidence: "After each move the robot sees its new position and receives points based on what happened. Checkpoints and the exit award points.",
-        method: "reinforcement",
-        reason: "The robot can use rewards from its actions to learn a policy, which tells it what move to make in a given state.",
-        evaluation: "Measure how often the robot reaches the exit and how many moves it takes, alongside the total reward it earns.",
-      },
-      predict: {
-        title: "Predict week-two survey completion",
-        goal: "A survey panel team wants to identify new members who are likely to complete a survey in week two.",
-        evidence: "You have first-week invitations and activity, plus a confirmed record of whether each member completed a survey in week two.",
-        method: "supervised",
-        reason: "Week-two completion is the label. The model learns from it using inputs that were already available at the end of week one.",
-        evaluation: "Test the predictions on a later cohort. To estimate the effect of a reminder, randomly assign eligible members to receive one or follow the usual schedule.",
-      },
-      group: {
-        title: "Discover early engagement groups",
-        goal: "The panel team wants to learn which patterns of activity appear among new members.",
-        evidence: "You have invitations, starts, completions, and response timing. Members have no assigned engagement categories.",
-        method: "unsupervised",
-        reason: "The model can group members with similar activity. The panel team can then decide which patterns are meaningful.",
-        evaluation: "Look for repeatable groups in a later cohort and check whether they suggest specific onboarding improvements to test.",
-      },
-      reminders: {
-        title: "Learn when to send reminders",
-        goal: "In a simulation, the panel team wants a strategy that encourages participation over two weeks.",
-        evidence: "At several points you can send a reminder or wait. The simulation awards 1 point for a completion and subtracts 3 points for an opt-out.",
-        method: "reinforcement",
-        reason: "Each choice can affect later activity. An agent can use the sequence of rewards to learn when to send a reminder and when to wait.",
-        evaluation: "Compare the simulated strategy with a fixed reminder schedule. Report completions and opt-outs separately so the total reward does not hide either outcome.",
-      },
-    };
+    const recency = 14 / 28;
+    const unanswered = 4 / 5;
+    const initialWeight = 0.60;
+    const outputWeight = 1.20;
+    const learningRate = 0.80;
 
-    const caseButtons = [...document.querySelectorAll("[data-case]")];
-    const panelButtons = [...document.querySelectorAll("[data-panel]")];
-    const routeButtons = [...document.querySelectorAll("[data-route]")];
-    const radios = [...document.querySelectorAll('input[name="method"]')];
-    const answers = new Map();
-    let activeCase = "fraud";
-    let panelTask = "predict";
-
-    function scenarioKey() {
-      return activeCase === "panel" ? panelTask : activeCase;
+    function forwardPass(recencyWeight) {
+      const hiddenSum = recency * recencyWeight + unanswered * 0.50 - 0.10;
+      const hidden = Math.max(0, hiddenSum);
+      const outputSum = outputWeight * hidden - 0.70;
+      const score = 1 / (1 + Math.exp(-outputSum));
+      return { hiddenSum, score };
     }
 
-    function renderFeedback(answer) {
-      const feedback = byId("feedback");
-      feedback.replaceChildren();
-      if (!answer) return;
-
-      const scenario = scenarios[scenarioKey()];
-      const correct = answer === scenario.method;
-      feedback.dataset.result = correct ? "correct" : "review";
-      const headline = document.createElement("p");
-      const label = document.createElement("strong");
-      label.textContent = correct
-        ? "Correct. " + methods[scenario.method] + " fits this case."
-        : "The best fit here is " + methods[scenario.method].toLowerCase() + ".";
-      headline.append(label);
-      const reason = document.createElement("p");
-      reason.textContent = scenario.reason;
-      const evaluation = document.createElement("p");
-      const evaluationLabel = document.createElement("strong");
-      evaluationLabel.textContent = "How to evaluate it. ";
-      evaluation.append(evaluationLabel, scenario.evaluation);
-      feedback.append(headline, reason, evaluation);
+    function trainingLoss(score, label) {
+      return label === 1 ? -Math.log(score) : -Math.log1p(-score);
     }
 
-    function renderCase() {
-      const key = scenarioKey();
-      const scenario = scenarios[key];
-      const answer = answers.get(key);
-      byId("scenario-title").textContent = scenario.title;
-      byId("scenario-goal").textContent = scenario.goal;
-      byId("scenario-evidence").textContent = scenario.evidence;
-      byId("panel-picker").hidden = activeCase !== "panel";
-      for (const button of caseButtons) {
-        const selected = button.dataset.case === activeCase;
-        button.setAttribute("aria-pressed", selected);
-        byId(button.dataset.case + "-lab").hidden = !selected;
-      }
-      for (const button of panelButtons) {
-        button.setAttribute("aria-pressed", button.dataset.panel === panelTask);
-      }
-      for (const radio of radios) radio.checked = radio.value === answer;
-      byId("next-case").hidden = activeCase === "panel";
-      renderFeedback(answer);
-    }
-
-    for (const button of caseButtons) {
-      button.addEventListener("click", () => {
-        activeCase = button.dataset.case;
-        renderCase();
-      });
-    }
-    for (const button of panelButtons) {
-      button.addEventListener("click", () => {
-        panelTask = button.dataset.panel;
-        renderCase();
-      });
-    }
-    byId("next-case").addEventListener("click", () => {
-      const currentIndex = caseButtons.findIndex((button) => button.dataset.case === activeCase);
-      const next = caseButtons[currentIndex + 1];
-      activeCase = next.dataset.case;
-      renderCase();
-      next.focus();
-    });
-    byId("method-form").addEventListener("submit", (event) => {
-      event.preventDefault();
-      const answer = new FormData(event.currentTarget).get("method");
-      answers.set(scenarioKey(), answer);
-      renderFeedback(answer);
-    });
-    for (const radio of radios) {
-      radio.addEventListener("change", () => renderFeedback());
-    }
-
-    const amountInput = 0.60;
-    const amountWeight = 0.50;
-    const deviceInput = 1;
-    const startingDeviceWeight = 0.20;
-    const bias = -0.90;
-    const label = 1;
-    const learningRate = 0.50;
-
-    function fraudScore(deviceWeight) {
-      const sum = amountInput * amountWeight + deviceInput * deviceWeight + bias;
-      return 1 / (1 + Math.exp(-sum));
-    }
-
-    const initialScore = fraudScore(startingDeviceWeight);
-    const deviceGradient = (initialScore - label) * deviceInput;
-    const updatedDeviceWeight = startingDeviceWeight - learningRate * deviceGradient;
-    const updatedScore = fraudScore(updatedDeviceWeight);
+    const initial = forwardPass(initialWeight);
     const percent = (score) => (100 * score).toFixed(1) + "%";
+    const radios = [...document.querySelectorAll('input[name="record"]')];
+    const trainButton = byId("train");
+    let trained = false;
 
-    function renderFraudStep(trained) {
-      byId("fraud-score").textContent = trained
-        ? percent(initialScore) + " → " + percent(updatedScore)
-        : percent(initialScore);
-      byId("device-weight").textContent = trained
-        ? startingDeviceWeight.toFixed(2) + " → " + updatedDeviceWeight.toFixed(3)
-        : startingDeviceWeight.toFixed(2);
-      byId("fraud-status").textContent = trained
-        ? "The unfamiliar-device weight increased, moving the score closer to the confirmed fraud label for this example."
-        : "";
-      byId("train-fraud").disabled = trained;
-      byId("reset-fraud").hidden = !trained;
+    function showStartingPoint() {
+      trained = false;
+      byId("outcome").textContent = "Revealed during training";
+      byId("recency-weight").textContent = initialWeight.toFixed(3);
+      byId("updated-score").hidden = true;
+      byId("loss-row").hidden = true;
+      byId("result").textContent = "";
+      byId("calculation-result").textContent = "";
+      trainButton.textContent = "Run one training step";
     }
 
-    byId("math-score").textContent = initialScore.toFixed(4);
-    byId("math-weight").textContent = updatedDeviceWeight.toFixed(4);
-    byId("math-updated-score").textContent = updatedScore.toFixed(4);
-    byId("train-fraud").addEventListener("click", () => {
-      renderFraudStep(true);
-      byId("reset-fraud").focus();
-    });
-    byId("reset-fraud").addEventListener("click", () => {
-      renderFraudStep(false);
-      byId("train-fraud").focus();
-    });
+    function trainOnSelectedRecord() {
+      const label = Number(radios.find((radio) => radio.checked).value);
+      const reluSlope = initial.hiddenSum > 0 ? 1 : 0;
+      const gradient = (initial.score - label) * outputWeight * reluSlope * recency;
+      const weight = initialWeight - learningRate * gradient;
+      const updated = forwardPass(weight);
+      const beforeLoss = trainingLoss(initial.score, label);
+      const afterLoss = trainingLoss(updated.score, label);
+      const outcome = label === 1 ? "Zero completions (1)" : "At least one completion (0)";
+      const direction = label === 1 ? "raises" : "lowers";
 
-    const purchases = [
-      [2, 18, "a"], [2.5, 30, "a"], [3, 22, "a"], [3.6, 28, "a"],
-      [7.4, 30, "b"], [8.3, 20, "b"], [9, 35, "b"], [10, 27, "b"],
-      [2.5, 73, "c"], [3.3, 91, "c"], [4.2, 79, "c"], [5, 100, "c"],
-    ];
-    const scatter = byId("scatter");
-    for (const [orders, value, group] of purchases) {
-      const point = document.createElement("span");
-      point.className = "point point-" + group;
-      point.style.left = (100 * orders / 12) + "%";
-      point.style.bottom = (100 * value / 120) + "%";
-      point.textContent = group.toUpperCase();
-      scatter.append(point);
-    }
-    byId("group-toggle").addEventListener("click", (event) => {
-      const button = event.currentTarget;
-      const grouped = scatter.classList.toggle("grouped");
-      button.setAttribute("aria-pressed", grouped);
-      button.textContent = grouped ? "Hide example groups" : "Show example groups";
-      byId("group-status").textContent = grouped
-        ? "One possible grouping. A orders less often with lower order values, B orders more often with lower order values, and C tends to place higher-value orders."
-        : "";
-    });
-
-    const mazeLayout = ["S", "", "", "", "E", "", "#", "#", "#", "", "", "", "C", "", ""];
-    const mazeRoutes = {
-      direct: [0, 1, 2, 3, 4],
-      detour: [0, 5, 10, 11, 12, 13, 14, 9, 4],
-    };
-    const mazeGrid = byId("maze-grid");
-    const mazeCells = mazeLayout.map((marker) => {
-      const cell = document.createElement("span");
-      cell.textContent = marker === "#" ? "" : marker;
-      cell.classList.toggle("wall", marker === "#");
-      mazeGrid.append(cell);
-      return cell;
-    });
-    let activeRoute = "direct";
-
-    function renderMaze() {
-      const route = mazeRoutes[activeRoute];
-      const bonus = Number(byId("checkpoint").value);
-      const directMoves = mazeRoutes.direct.length - 1;
-      const detourMoves = mazeRoutes.detour.length - 1;
-      const directPoints = 10 - directMoves;
-      const detourPoints = 10 - detourMoves + bonus;
-      byId("bonus-value").textContent = bonus;
-      for (const [index, cell] of mazeCells.entries()) cell.classList.toggle("route", route.includes(index));
-      for (const button of routeButtons) button.setAttribute("aria-pressed", button.dataset.route === activeRoute);
-      mazeGrid.setAttribute("aria-label", activeRoute === "direct"
-        ? "Maze showing the direct route from start to exit in " + directMoves + " moves"
-        : "Maze showing the checkpoint route from start to exit in " + detourMoves + " moves");
-      byId("route-totals").textContent =
-        "Direct route (" + directMoves + " moves) earns " + directPoints + " points. " +
-        "Checkpoint route (" + detourMoves + " moves) earns " + detourPoints + " points.";
+      byId("outcome").textContent = outcome;
+      byId("recency-weight").textContent = initialWeight.toFixed(3) + " → " + weight.toFixed(3);
+      byId("score-after").textContent = percent(updated.score);
+      byId("bar-after").style.width = percent(updated.score);
+      byId("loss").textContent = beforeLoss.toFixed(3) + " → " + afterLoss.toFixed(3);
+      byId("updated-score").hidden = false;
+      byId("loss-row").hidden = false;
+      byId("result").textContent = outcome + ". One update " + direction + " the score to " +
+        percent(updated.score) + " and lowers the loss on this record.";
+      byId("calculation-result").textContent = "For this record, the gradient is " +
+        gradient.toFixed(3) + " and the updated weight is " + weight.toFixed(3) + ".";
+      trainButton.textContent = "Reset training step";
+      trained = true;
     }
 
-    for (const button of routeButtons) {
-      button.addEventListener("click", () => {
-        activeRoute = button.dataset.route;
-        renderMaze();
-      });
-    }
-    byId("checkpoint").addEventListener("input", renderMaze);
+    trainButton.addEventListener("click", () => {
+      if (trained) {
+        showStartingPoint();
+      } else {
+        trainOnSelectedRecord();
+      }
+    });
 
-    renderCase();
-    renderFraudStep(false);
-    renderMaze();
-    byId("guide").hidden = false;
+    for (const radio of radios) {
+      radio.addEventListener("change", showStartingPoint);
+    }
+
+    byId("score-before").textContent = percent(initial.score);
+    byId("bar-before").style.width = percent(initial.score);
+    showStartingPoint();
+    byId("demo-controls").hidden = false;
   </script>
 </body>
 </html>
