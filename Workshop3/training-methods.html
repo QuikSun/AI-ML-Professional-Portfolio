@@ -274,7 +274,7 @@
           <section class="card" aria-labelledby="response-title">
             <h2 id="response-title">Model Response</h2>
             <div class="output">
-              <span id="output-label">Top-scored Next Word</span>
+              <span id="output-label">Top-Scored Next Word</span>
               <strong id="response-word"></strong>
             </div>
             <div class="bars" id="probabilities" role="group" aria-label="Toy next-word probabilities"></div>
@@ -283,7 +283,7 @@
               <h3>Training Feedback</h3>
               <p id="feedback-text"></p>
               <div class="actions">
-                <button type="button" class="action primary" id="train">Run one Update</button>
+                <button type="button" class="action primary" id="train">Run One Update</button>
                 <button type="button" class="action secondary" id="sample" hidden>Draw a Sample</button>
               </div>
               <p id="training-status" role="status"></p>
@@ -331,7 +331,7 @@
         text: "The capital of France is ___",
         candidates: ["Paris", "Lyon", "Rome"],
         target: "Paris",
-        checkTitle: "Verify a factual answer",
+        checkTitle: "Verify a Factual Answer",
         check: "Paris is France’s capital. A high score reflects the word patterns the model uses. An independent source can confirm the fact.",
       },
       time: {
@@ -345,7 +345,7 @@
         text: "The current president of the small island nation of Velmora, founded in 1998, is ___",
         candidates: ["Elara", "Nera", "unknown"],
         target: "Elara",
-        checkTitle: "Check the premise first",
+        checkTitle: "Check The Premise First",
         check: "Velmora is fictional. In the exercise, I questioned the premise because the name was unfamiliar and the prompt gave an oddly specific founding date. The names in this demo are invented.",
       },
     };
@@ -377,36 +377,36 @@
         title: "Feedforward ANN",
         intro: "A dense network combines word cues from the prompt into a set of scores.",
         steps: [
-          ["Read Word Cues", "Encode the Prompt", "This example counts words associated with geography, story openings, and public office. The highlighted words contribute to the strongest cue."],
-          ["Combine Cues", "Apply Weights and an Activation", "The hidden layer weights the cue counts and adds a bias. ReLU keeps positive results and maps negative results to zero."],
-          ["Score the Words", "Predict a Continuation", "The output layer uses the hidden activations to score possible next words. Softmax converts those scores to probabilities."],
+          ["Read Word Cues", "Encode The Prompt", "This example counts words associated with geography, story openings, and public office. The highlighted words contribute to the strongest cue."],
+          ["Combine Cues", "Apply Weights And An Activation", "The hidden layer weights the cue counts and adds a bias. ReLU keeps positive results and maps negative results to zero."],
+          ["Score The Words", "Predict A Continuation", "The output layer uses the hidden activations to score possible next words. Softmax converts those scores to probabilities."],
         ],
       },
       cnn: {
         title: "Convolutional Neural Network",
         intro: "A one-dimensional convolution slides the same filter across nearby words.",
         steps: [
-          ["Scan Windows", "Slide the filter", "The same filter scores each three-word window in the prompt. A larger response indicates a closer match to its pattern."],
-          ["Keep the Strongest", "Find the Strongest Response", "Max pooling keeps the largest response from this filter. The window with that response is highlighted."],
-          ["Score the Words", "Predict From Local Patterns", "The output layer uses the strongest local pattern to score each candidate. Softmax converts the scores to probabilities."],
+          ["Scan Windows", "Slide The Filter", "The same filter scores each three-word window in the prompt. A larger response indicates a closer match to its pattern."],
+          ["Keep The Strongest", "Find The Strongest Response", "Max pooling keeps the largest response from this filter. The window with that response is highlighted."],
+          ["Score The Words", "Predict From Local Patterns", "The output layer uses the strongest local pattern to score each candidate. Softmax converts the scores to probabilities."],
         ],
       },
       rnn: {
         title: "Recurrent Neural Network",
         intro: "The network reads in order and carries a hidden state from one word to the next.",
         steps: [
-          ["Read In Order", "Process the Next Word", "Use the slider to inspect each word. The same update rule combines the current word’s cue with the previous hidden state."],
-          ["Carry Context", "Keep a Running State", "The tanh activation bounds the state. An earlier cue can still affect later steps, although its influence can fade as more words arrive."],
-          ["Score the Words", "Predict from the Final State", "The last hidden state summarizes the prefix for the output layer, which produces a distribution over the next words."],
+          ["Read In Order", "Process The Next Word", "Use the slider to inspect each word. The same update rule combines the current word’s cue with the previous hidden state."],
+          ["Carry Context", "Keep A Running State", "The tanh activation bounds the state. An earlier cue can still affect later steps, although its influence can fade as more words arrive."],
+          ["Score The Words", "Predict from the Final State", "The last hidden state summarizes the prefix for the output layer, which produces a distribution over the next words."],
         ],
       },
       gan: {
-        title: "Generative adversarial network",
+        title: "Generative Adversarial Network",
         intro: "An RNN generator proposes a word. A CNN discriminator scores how closely the completed phrase resembles examples in the toy corpus.",
         steps: [
-          ["Propose Words", "Build a Generator Distribution", "The generator reads the prompt in order and assigns a probability to each possible continuation. Draw a sample to see one generated word."],
-          ["Judge the Text", "Score the Completed Phrase", "The toy discriminator scans the prompt plus each candidate with two-word filters. Its fixed weights stand in for patterns a discriminator would learn during training."],
-          ["Update the Generator", "Learn from Discriminator Rewards", "A full GAN also trains the discriminator to tell corpus examples and generated samples apart. This step holds the discriminator fixed and uses its scores as rewards to update the generator."],
+          ["Propose Words", "Build A Generator Distribution", "The generator reads the prompt in order and assigns a probability to each possible continuation. Draw a sample to see one generated word."],
+          ["Judge The Text", "Score The Completed Phrase", "The toy discriminator scans the prompt plus each candidate with two-word filters. Its fixed weights stand in for patterns a discriminator would learn during training."],
+          ["Update The Generator", "Learn From Discriminator Rewards", "A full GAN also trains the discriminator to tell corpus examples and generated samples apart. This step holds the discriminator fixed and uses its scores as rewards to update the generator."],
         ],
       },
     };
@@ -548,7 +548,7 @@
           scan.max = model.windows.length;
           const index = scanning ? Number(scan.value) - 1 : model.windows.indexOf(model.activation);
           showWords([index, index + 1, index + 2]);
-          byId("scan-name").textContent = "Filter position";
+          byId("scan-name").textContent = "Filter Position";
           byId("scan-count").textContent = (index + 1) + " of " + model.windows.length;
           detail.textContent = "“" + model.words.slice(index, index + 3).join(" ") +
             "” · " + cues[model.strongest].name + " filter response " + number(model.windows[index]);
@@ -583,7 +583,7 @@
     function renderResponse() {
       const probabilities = trained ? model.updated : model.initial;
       const best = probabilities.indexOf(Math.max(...probabilities));
-      byId("output-label").textContent = sampledIndex === null ? "Top-scored next word" : "Sampled next word";
+      byId("output-label").textContent = sampledIndex === null ? "Top-Scored Next Word" : "Sampled Next Word";
       byId("response-word").textContent = model.prompt.candidates[sampledIndex ?? best];
 
       const bars = byId("probabilities");
@@ -617,7 +617,7 @@
         : (promptKey === "velmora" ? "Fictional training example. “" : "Training example. “") +
           trainingExample + "” The target is “" + target + ".”";
       byId("sample").hidden = !adversarial;
-      train.textContent = trained ? "Reset update" : "Run one update";
+      train.textContent = trained ? "Reset update" : "Run One Update";
     }
 
     function renderCase() {
