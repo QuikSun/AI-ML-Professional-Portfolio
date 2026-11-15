@@ -272,19 +272,19 @@
           </section>
 
           <section class="card" aria-labelledby="response-title">
-            <h2 id="response-title">Model response</h2>
+            <h2 id="response-title">Model Response</h2>
             <div class="output">
-              <span id="output-label">Top-scored next word</span>
+              <span id="output-label">Top-scored Next Word</span>
               <strong id="response-word"></strong>
             </div>
             <div class="bars" id="probabilities" role="group" aria-label="Toy next-word probabilities"></div>
             <p class="footnote">The demo calculates probabilities over the three words shown, using manually chosen starting weights.</p>
             <div class="feedback">
-              <h3>Training feedback</h3>
+              <h3>Training Feedback</h3>
               <p id="feedback-text"></p>
               <div class="actions">
-                <button type="button" class="action primary" id="train">Run one update</button>
-                <button type="button" class="action secondary" id="sample" hidden>Draw a sample</button>
+                <button type="button" class="action primary" id="train">Run one Update</button>
+                <button type="button" class="action secondary" id="sample" hidden>Draw a Sample</button>
               </div>
               <p id="training-status" role="status"></p>
             </div>
@@ -298,16 +298,16 @@
       </div>
 
       <section class="card course-notes" aria-labelledby="comparison-title">
-        <h2 id="comparison-title">What each network learns from</h2>
+        <h2 id="comparison-title">What Each Network Learns From</h2>
         <dl class="comparison">
-          <div><dt>Feedforward artificial neural network (ANN)</dt><dd>A dense network combines encoded word cues. Here the next word in the text supplies the target.</dd></div>
-          <div><dt>Convolutional neural network (CNN)</dt><dd>A shared filter scans short word windows. The same next-word objective can teach the network which local patterns help its prediction.</dd></div>
-          <div><dt>Recurrent neural network (RNN)</dt><dd>A hidden state carries context forward as the network reads. The next word supplies the target here as well.</dd></div>
-          <div><dt>Generative adversarial network (GAN)</dt><dd>A generator proposes text. A discriminator learns to distinguish corpus examples from generated ones, and its score guides the generator.</dd></div>
+          <div><dt>Feedforward Artificial Neural Network (ANN)</dt><dd>A dense network combines encoded word cues. Here the next word in the text supplies the target.</dd></div>
+          <div><dt>Convolutional Neural Network (CNN)</dt><dd>A shared filter scans short word windows. The same next-word objective can teach the network which local patterns help its prediction.</dd></div>
+          <div><dt>Recurrent Neural Network (RNN)</dt><dd>A hidden state carries context forward as the network reads. The next word supplies the target here as well.</dd></div>
+          <div><dt>Generative Adversarial Network (GAN)</dt><dd>A generator proposes text. A discriminator learns to distinguish corpus examples from generated ones, and its score guides the generator.</dd></div>
         </dl>
         <p>The first three demos use <strong>self-supervised learning</strong>. During training, the text supplies the next word as the target. During generation, the model scores possible continuations from the prompt. The GAN uses <strong>adversarial training</strong> and can combine an RNN generator with a CNN discriminator. Many modern language models use a Transformer to predict the next token.</p>
         <details>
-          <summary>Course connection and references</summary>
+          <summary>Course Connection and References</summary>
           <p>The three prompts come from the opening stage of the assigned <strong>3.3 AI Training Interaction</strong>, Professor Predict. The network comparison applies the architectures and activation functions from <strong>3.2 Neural Networks</strong> to the same prompts.</p>
           <ul>
             <li><a href="https://www.ibm.com/think/topics/neural-networks">IBM · Neural networks</a></li>
@@ -338,7 +338,7 @@
         text: "Once upon a ___",
         candidates: ["time", "day", "night"],
         target: "time",
-        checkTitle: "Recognize a familiar phrase",
+        checkTitle: "Recognize A Familiar Phrase",
         check: "Time is the familiar storybook continuation. Its high score reflects a language convention.",
       },
       velmora: {
@@ -377,36 +377,36 @@
         title: "Feedforward ANN",
         intro: "A dense network combines word cues from the prompt into a set of scores.",
         steps: [
-          ["Read word cues", "Encode the prompt", "This example counts words associated with geography, story openings, and public office. The highlighted words contribute to the strongest cue."],
-          ["Combine cues", "Apply weights and an activation", "The hidden layer weights the cue counts and adds a bias. ReLU keeps positive results and maps negative results to zero."],
-          ["Score the words", "Predict a continuation", "The output layer uses the hidden activations to score possible next words. Softmax converts those scores to probabilities."],
+          ["Read Word Cues", "Encode the Prompt", "This example counts words associated with geography, story openings, and public office. The highlighted words contribute to the strongest cue."],
+          ["Combine Cues", "Apply Weights and an Activation", "The hidden layer weights the cue counts and adds a bias. ReLU keeps positive results and maps negative results to zero."],
+          ["Score the Words", "Predict a Continuation", "The output layer uses the hidden activations to score possible next words. Softmax converts those scores to probabilities."],
         ],
       },
       cnn: {
-        title: "Convolutional neural network",
+        title: "Convolutional Neural Network",
         intro: "A one-dimensional convolution slides the same filter across nearby words.",
         steps: [
-          ["Scan windows", "Slide the filter", "The same filter scores each three-word window in the prompt. A larger response indicates a closer match to its pattern."],
-          ["Keep the strongest", "Find the strongest response", "Max pooling keeps the largest response from this filter. The window with that response is highlighted."],
-          ["Score the words", "Predict from local patterns", "The output layer uses the strongest local pattern to score each candidate. Softmax converts the scores to probabilities."],
+          ["Scan Windows", "Slide the filter", "The same filter scores each three-word window in the prompt. A larger response indicates a closer match to its pattern."],
+          ["Keep the Strongest", "Find the Strongest Response", "Max pooling keeps the largest response from this filter. The window with that response is highlighted."],
+          ["Score the Words", "Predict From Local Patterns", "The output layer uses the strongest local pattern to score each candidate. Softmax converts the scores to probabilities."],
         ],
       },
       rnn: {
-        title: "Recurrent neural network",
+        title: "Recurrent Neural Network",
         intro: "The network reads in order and carries a hidden state from one word to the next.",
         steps: [
-          ["Read in order", "Process the next word", "Use the slider to inspect each word. The same update rule combines the current word’s cue with the previous hidden state."],
-          ["Carry context", "Keep a running state", "The tanh activation bounds the state. An earlier cue can still affect later steps, although its influence can fade as more words arrive."],
-          ["Score the words", "Predict from the final state", "The last hidden state summarizes the prefix for the output layer, which produces a distribution over the next words."],
+          ["Read In Order", "Process the Next Word", "Use the slider to inspect each word. The same update rule combines the current word’s cue with the previous hidden state."],
+          ["Carry Context", "Keep a Running State", "The tanh activation bounds the state. An earlier cue can still affect later steps, although its influence can fade as more words arrive."],
+          ["Score the Words", "Predict from the Final State", "The last hidden state summarizes the prefix for the output layer, which produces a distribution over the next words."],
         ],
       },
       gan: {
         title: "Generative adversarial network",
         intro: "An RNN generator proposes a word. A CNN discriminator scores how closely the completed phrase resembles examples in the toy corpus.",
         steps: [
-          ["Propose words", "Build a generator distribution", "The generator reads the prompt in order and assigns a probability to each possible continuation. Draw a sample to see one generated word."],
-          ["Judge the text", "Score the completed phrase", "The toy discriminator scans the prompt plus each candidate with two-word filters. Its fixed weights stand in for patterns a discriminator would learn during training."],
-          ["Update the generator", "Learn from discriminator rewards", "A full GAN also trains the discriminator to tell corpus examples and generated samples apart. This step holds the discriminator fixed and uses its scores as rewards to update the generator."],
+          ["Propose Words", "Build a Generator Distribution", "The generator reads the prompt in order and assigns a probability to each possible continuation. Draw a sample to see one generated word."],
+          ["Judge the Text", "Score the Completed Phrase", "The toy discriminator scans the prompt plus each candidate with two-word filters. Its fixed weights stand in for patterns a discriminator would learn during training."],
+          ["Update the Generator", "Learn from Discriminator Rewards", "A full GAN also trains the discriminator to tell corpus examples and generated samples apart. This step holds the discriminator fixed and uses its scores as rewards to update the generator."],
         ],
       },
     };
