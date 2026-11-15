@@ -1511,7 +1511,7 @@ a{color:#165f7d;text-underline-offset:3px}a:hover{color:#14263b}a:focus-visible{
 </head>
 <body>
 
-<header class="project-header"><div class="shell"><a class="project-brand" href="../index.html">Sunny | AI &amp; ML Portfolio</a><a href="../index.html#workshops">Back to portfolio</a></div></header>
+<header class="project-header"><div class="shell"><a class="project-brand" href="../index.html">Sunny | AI &amp; ML Portfolio</a><a href="../index.html#workshops">Back To Portfolio</a></div></header>
 <main class="shell">
   <div class="project-hero">
     <div class="project-label">Workshop 2 · Portfolio Artifact 2</div>
@@ -1519,9 +1519,9 @@ a{color:#165f7d;text-underline-offset:3px}a:hover{color:#14263b}a:focus-visible{
     <p class="project-intro">Explore how customer inputs can lead to a churn classification, and how context can change the meaning of a word during translation.</p>
     <p>Adapted from Assignment 2.3 for employers and business analysts. These examples make the reasoning behind an output visible through interaction.</p>
     <p><strong>Scope:</strong> Both examples are conceptual teaching demonstrations. The classifier uses hand-set rules; the translation output and attention cues are scripted. Neither uses trained weights or real customer data.</p>
-    <nav class="project-nav" aria-label="Artifact navigation"><a href="#churn-demo">Churn classification</a><a href="#translation-demo">Context and translation</a><a href="#project-notes">Project notes and sources</a></nav>
+    <nav class="project-nav" aria-label="Artifact navigation"><a href="#churn-demo">Churn Classification</a><a href="#translation-demo">Context and Translation</a><a href="#project-notes">Project Notes and Sources</a></nav>
   </div>
-  <section class="project-section" id="churn-demo" aria-label="Churn prediction demonstration">
+  <section class="project-section" id="churn-demo" aria-label="Churn Prediction Demonstration">
     <p class="demo-intro">Move the sliders to follow the decisions for an example customer. A trained decision tree learns its splits from labeled examples. Here, the thresholds are hand-set so the classification path is easy to inspect.</p>
 <div id="churn-classifier-example">
   <style>
@@ -1538,23 +1538,23 @@ a{color:#165f7d;text-underline-offset:3px}a:hover{color:#14263b}a:focus-visible{
     #churn-classifier-example .result-line strong { font-weight: 500; }
     #churn-classifier-example .route-key { display: inline-block; width: 12px; height: 12px; background: var(--viz-series-1); margin-right: 6px; vertical-align: middle; }
   </style>
-  <h2>Churn classifier</h2>
+  <h2>Churn Classifier</h2>
   <div class="text-small text-muted">Hand-set teaching rules · binary prediction for the next 30 days</div>
   <div class="viz-controls">
-    <label class="form-label" for="churn-inactive">Days since last activity: <output id="churn-inactive-value" class="tabular-nums">18</output>
+    <label class="form-label" for="churn-inactive">Days Since Last Activity: <output id="churn-inactive-value" class="tabular-nums">18</output>
       <input class="form-range" type="range" id="churn-inactive" min="0" max="30" step="1" value="18">
     </label>
-    <label class="form-label" for="churn-usage">Uses in the past 30 days: <output id="churn-usage-value" class="tabular-nums">2</output>
+    <label class="form-label" for="churn-usage">Uses In The Past 30 Days: <output id="churn-usage-value" class="tabular-nums">2</output>
       <input class="form-range" type="range" id="churn-usage" min="0" max="20" step="1" value="2">
     </label>
-    <label class="form-label" for="churn-tickets">Unresolved support tickets: <output id="churn-tickets-value" class="tabular-nums">0</output>
+    <label class="form-label" for="churn-tickets">Unresolved Support Tickets: <output id="churn-tickets-value" class="tabular-nums">0</output>
       <input class="form-range" type="range" id="churn-tickets" min="0" max="5" step="1" value="0">
     </label>
   </div>
   <figure class="tree-figure">
     <svg class="tree-svg" role="img" aria-labelledby="churn-tree-title churn-tree-desc"></svg>
   </figure>
-  <div class="result-line" aria-live="polite" aria-atomic="true">Predicted class: <strong id="churn-result">Churn</strong></div>
+  <div class="result-line" aria-live="polite" aria-atomic="true">Predicted Class: <strong id="churn-result">Churn</strong></div>
   <div class="text-small text-muted"><span class="route-key" aria-hidden="true"></span>Highlighted route = decisions used for this customer</div>
   <script>
     (() => {
@@ -1588,7 +1588,7 @@ a{color:#165f7d;text-underline-offset:3px}a:hover{color:#14263b}a:focus-visible{
         root.querySelector('#churn-tickets-value').textContent=t;
         const idle=d>14,follow=idle?u<=2:t>=2;
         const leafIndex=idle?(follow?0:1):(follow?2:3);
-        const result=follow?'Churn':'No churn';
+        const result=follow?'Churn':'No Churn';
         root.querySelector('#churn-result').textContent=result;root.dataset.prediction=result;
         const width=Math.max(280,Math.round(root.getBoundingClientRect().width));
         const narrow=width<580,height=narrow?300:338;
@@ -1609,7 +1609,7 @@ a{color:#165f7d;text-underline-offset:3px}a:hover{color:#14263b}a:focus-visible{
           node(width/2,14,278,['Inactive for more than 14 days?'],true,false);
           node(left,143,Math.min(width/2-28,244),['Uses in past 30 days','at most 2?'],idle,false);
           node(right,143,Math.min(width/2-28,244),['Unresolved tickets','at least 2?'],!idle,false);
-          leaves.forEach((x,i)=>node(x,280,width/4-16,[i%2===0?'Churn':'No churn'],leafIndex===i,true));
+          leaves.forEach((x,i)=>node(x,280,width/4-16,[i%2===0?'Churn':'No Churn'],leafIndex===i,true));
         }
       }
       [inactive,usage,tickets].forEach(input=>input.addEventListener('input',draw));
@@ -1619,7 +1619,7 @@ a{color:#165f7d;text-underline-offset:3px}a:hover{color:#14263b}a:focus-visible{
 </div>
 
   </section>
-  <section class="project-section" id="translation-demo" aria-label="Translation demonstration">
+  <section class="project-section" id="translation-demo" aria-label="Translation Demonstration">
     <p class="demo-intro">Switch between the two sentences, then step through generation. The surrounding words help distinguish a riverbank from a financial bank. Word groups stand in for model tokens; the highlighted focus is illustrative and is not a measured attention pattern.</p>
 <div id="transformer-translation-example">
   <style>
@@ -1637,10 +1637,10 @@ a{color:#165f7d;text-underline-offset:3px}a:hover{color:#14263b}a:focus-visible{
     #transformer-translation-example .focus-legend { margin-top: 10px; }
     #transformer-translation-example .focus-mark { display: inline-block; background: color-mix(in srgb, var(--viz-series-1) 45%, transparent); width: 12px; height: 12px; vertical-align: middle; margin-right: 6px; }
   </style>
-  <h2>Transformer translation</h2>
+  <h2>Transformer Translation</h2>
   <div class="text-small text-muted">English to Traditional Chinese · scripted outputs and attention cues</div>
   <div class="viz-controls">
-    <label class="form-label" for="translation-sentence">Sentence context
+    <label class="form-label" for="translation-sentence">Sentence Context
       <select class="form-select" id="translation-sentence">
         <option value="river">He sat by the bank of the river.</option>
         <option value="money">She went to the bank to deposit money.</option>
@@ -1652,11 +1652,11 @@ a{color:#165f7d;text-underline-offset:3px}a:hover{color:#14263b}a:focus-visible{
     <div class="context-row"><span class="encoder-label">Encoder context for “bank”</span><span id="translation-meaning">river edge</span></div>
     <hr>
     <div>
-      <div class="viz-row"><span>Decoder output</span><span class="text-small text-muted tabular-nums" id="translation-step">Step 3 of 5</span></div>
+      <div class="viz-row"><span>Decoder Output</span><span class="text-small text-muted tabular-nums" id="translation-step">Step 3 of 5</span></div>
       <div class="decoder-output"><h3 class="target-groups" lang="zh-Hant"><span class="target-prefix" id="translation-prefix">他坐在</span><span class="target-next" id="translation-next">河岸</span></h3><span class="text-small" id="translation-gloss">Next: riverbank</span></div>
     </div>
   </figure>
-  <div class="viz-row generation-controls"><button type="button" class="btn" id="translation-back">Previous step</button><button type="button" class="btn btn-primary" id="translation-forward">Generate next word group</button></div>
+  <div class="viz-row generation-controls"><button type="button" class="btn" id="translation-back">Previous Step</button><button type="button" class="btn btn-primary" id="translation-forward">Generate Next Word Group</button></div>
   <div class="focus-legend text-small text-muted"><span class="focus-mark" aria-hidden="true"></span>Darker source words = stronger scripted focus for the next word group</div>
   <div class="sr-only" aria-live="polite" aria-atomic="true" id="translation-announcement"></div>
   <script>
@@ -1680,7 +1680,7 @@ a{color:#165f7d;text-underline-offset:3px}a:hover{color:#14263b}a:focus-visible{
         root.querySelector('#translation-gloss').textContent=complete?'Translation complete':'Next: '+data.gloss[emitted];
         root.querySelector('#translation-step').textContent=complete?'Complete · 5 of 5':'Step '+(emitted+1)+' of 5';
         back.disabled=emitted===0;forward.disabled=complete;root.dataset.context=selector.value;root.dataset.emitted=String(emitted);
-        root.querySelector('#translation-announcement').textContent='Context: '+data.meaning+'. Generated prefix: '+prefix+'. '+(complete?'Translation complete.':'Next word group: '+data.target[emitted]+', '+data.gloss[emitted]+'.');
+        root.querySelector('#translation-announcement').textContent='Context: '+data.meaning+'. Generated prefix: '+prefix+'. '+(complete?'Translation complete.':'Next Word Group: '+data.target[emitted]+', '+data.gloss[emitted]+'.');
       }
       selector.addEventListener('change',()=>{emitted=2;draw();});
       back.addEventListener('click',()=>{emitted=Math.max(0,emitted-1);draw();});
@@ -1691,12 +1691,12 @@ a{color:#165f7d;text-underline-offset:3px}a:hover{color:#14263b}a:focus-visible{
 
   </section>
   <section class="project-section project-notes" id="project-notes">
-    <h2>Project notes</h2>
-    <p><strong>Purpose and audience:</strong> This artifact translates an academic comparison of machine learning and deep learning into examples that employers and business analysts can explore without reading model code or interpreting a benchmark.</p>
-    <p><strong>Skills demonstrated:</strong> AI/ML conceptual understanding, research synthesis, explanation of model behavior, and adaptation of technical material for a professional audience.</p>
-    <p><strong>Connection to the paper:</strong> The decision tree complements the paper’s discussion of conventional classifiers by making a classification path visible. It does not reproduce the paper’s SVM. The translation walkthrough illustrates contextual interpretation and sequential generation.</p>
+    <h2>Project Notes</h2>
+    <p><strong>Purpose and Audience:</strong> This artifact translates an academic comparison of machine learning and deep learning into examples that employers and business analysts can explore without reading model code or interpreting a benchmark.</p>
+    <p><strong>Skills Demonstrated:</strong> AI/ML conceptual understanding, research synthesis, explanation of model behavior, and adaptation of technical material for a professional audience.</p>
+    <p><strong>Connection To The Paper:</strong> The decision tree complements the paper’s discussion of conventional classifiers by making a classification path visible. It does not reproduce the paper’s SVM. The translation walkthrough illustrates contextual interpretation and sequential generation.</p>
     <p><strong>Limitations:</strong> The churn rules and 30-day prediction horizon are teaching assumptions with no validated predictive accuracy. The translation walkthrough supports two preset sentences and does not translate arbitrary text. These examples demonstrate inference concepts rather than model training or deployment.</p>
-    <p><strong>AI assistance:</strong> ChatGPT helped adapt the explanations and generate the demonstration code. The code and presentation are AI-assisted; the examples do not establish original model-training results.</p>
+    <p><strong>AI Assistance:</strong> ChatGPT helped adapt the explanations and generate the demonstration code. The code and presentation are AI-assisted; the examples do not establish original model-training results.</p>
     <h3>Sources</h3>
     <ul class="project-sources">
       <li>scikit-learn. <a href="https://scikit-learn.org/stable/modules/tree.html">Decision trees</a>. Documentation explaining supervised decision-tree classification and prediction.</li>
