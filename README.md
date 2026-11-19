@@ -32,9 +32,11 @@ An introduction to the history, evolution, and fundamental concepts of artificia
 
 *Workshop description and selected assignments will be added.*
 
-## Workshop 4 — To Be Added
+## Workshop 4 — Data Readiness For Machine Learning
 
-*Workshop description and selected assignments will be added.*
+**When “P” Means Two Things** follows 18 fictional hospital reports across 12 encounters. Change the code dictionary, counting unit, or reporting cutoff to see which outcomes qualify as training labels.
+
+[Open The Interactive Lab](https://quiksun.github.io/AI-ML-Professional-Portfolio/Workshop4/hospital-data-readiness.html) · [Read The Workshop 4 README](./Workshop4/README.md)
 
 ## Workshop 5 — To Be Added
 

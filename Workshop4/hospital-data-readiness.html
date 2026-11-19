@@ -1,0 +1,690 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explore how hospital code definitions, repeated reports and late results change machine learning training labels.">
+  <title>When “P” Means Two Things | Sunny’s AI &amp; ML Portfolio</title>
+  <style>
+    :root {
+      --navy: #14263b;
+      --navy-2: #1c394f;
+      --aqua: #8edbe1;
+      --ink: #203044;
+      --muted: #506478;
+      --teal: #155b6a;
+      --line: #d5e0e8;
+      --page: #f4f8fa;
+      --tint: #edf7f8;
+    }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--page);
+      font: 1rem/1.55 system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    h1, h2, h3, p, figure, blockquote { margin: 0; }
+    h1, h2, h3, legend { line-height: 1.2; }
+    h2 { font-size: clamp(1.35rem, 2.6vw, 1.75rem); letter-spacing: -.025em; }
+    h3 { font-size: 1rem; }
+    button, input { font: inherit; }
+    a { color: #165f7d; text-underline-offset: .2em; }
+    :focus-visible { outline: 3px solid #007d91; outline-offset: 3px; }
+    .shell { width: min(100% - 48px, 1120px); margin-inline: auto; }
+    .top, .hero, footer { background: var(--navy); color: white; }
+    .top { border-bottom: 1px solid #405569; }
+    .nav {
+      min-height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px 18px;
+      padding-block: 8px;
+    }
+    .nav a { color: #e5eff4; font-weight: 650; font-size: .89rem; }
+    .nav a:first-child { color: white; text-decoration: none; }
+    .nav a:focus-visible { outline-color: var(--aqua); }
+    .hero {
+      padding-block: clamp(26px, 4.4vw, 56px);
+      background: linear-gradient(110deg, var(--navy) 35%, var(--navy-2));
+    }
+    .course {
+      color: var(--aqua);
+      font-size: .8rem;
+      letter-spacing: .095em;
+      font-weight: 750;
+      text-transform: uppercase;
+    }
+    h1 {
+      font-size: clamp(2.1rem, 5.2vw, 3.7rem);
+      letter-spacing: -.045em;
+      margin-block: 8px 10px;
+    }
+    .hero p:last-child { max-width: 70ch; color: #e2edf3; font-size: clamp(1rem, 2vw, 1.13rem); }
+    .content { display: grid; gap: 20px; padding-block: 24px 35px; }
+    .card {
+      min-width: 0;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 4px 18px rgb(20 38 59 / 4%);
+      padding: clamp(14px, 2.4vw, 24px);
+    }
+    fieldset { min-width: 0; border: 0; padding: 0; margin: 0; }
+    legend { padding: 0; margin-bottom: 9px; font-size: 1rem; font-weight: 740; }
+    .selectors { display: grid; gap: 16px; }
+    .choices { display: grid; gap: 7px; }
+    .examples { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .rule-sets { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .choice {
+      position: relative;
+      display: grid;
+      place-content: center;
+      min-height: 46px;
+      padding: 6px 8px;
+      border: 1px solid #beccd7;
+      border-radius: 8px;
+      background: white;
+      text-align: center;
+      color: var(--ink);
+      font-size: .91rem;
+      font-weight: 690;
+      line-height: 1.25;
+      cursor: pointer;
+    }
+    .choice:hover { border-color: #458696; background: var(--tint); }
+    .choice:has(input:checked) { background: var(--navy-2); border-color: var(--navy-2); color: white; }
+    .choice:has(input:focus-visible) { outline: 3px solid #007d91; outline-offset: 3px; }
+    .choice input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+    .prompt {
+      padding: 11px 15px;
+      border-inline-start: 3px solid #4292a0;
+      background: var(--tint);
+      border-radius: 0 8px 8px 0;
+      font-size: clamp(1rem, 2.5vw, 1.24rem);
+      font-weight: 670;
+    }
+    .demo-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 14px; align-items: start; }
+    .demo-grid > .card > p, .stage > p { margin-top: 7px; }
+    .muted, .footnote { color: var(--muted); }
+    .footnote { font-size: .88rem; }
+    .stages {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+      margin-top: 15px;
+    }
+    .step, .action {
+      min-height: 44px;
+      border: 1px solid #b8ccd5;
+      border-radius: 8px;
+      padding: 6px 9px;
+      background: white;
+      color: var(--teal);
+      font-size: .87rem;
+      font-weight: 710;
+      line-height: 1.25;
+      cursor: pointer;
+    }
+    .step:hover, .action.secondary:hover { background: var(--tint); }
+    .step[aria-pressed="true"] { border-color: #6096a4; background: var(--tint); color: #174b58; }
+    .stage { margin-top: 12px; padding: 13px; border-radius: 9px; background: var(--page); }
+    .token-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      padding: 0;
+      margin: 9px 0 0;
+      list-style: none;
+    }
+    .token-strip li {
+      border: 1px solid #c7d5df;
+      padding: 2px 7px;
+      border-radius: 6px;
+      background: white;
+      font-size: .86rem;
+      overflow-wrap: anywhere;
+    }
+    .token-strip .emphasis { border-color: #6a9caa; background: #ddf1f3; font-weight: 720; }
+    .scan-label { display: block; margin-top: 10px; font-size: .89rem; font-weight: 670; }
+    .scan-label + input { width: min(100%, 260px); accent-color: var(--teal); }
+    #stage-detail { font-variant-numeric: tabular-nums; }
+    .output {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 2px 12px;
+      margin-top: 10px;
+    }
+    .output strong { color: var(--teal); font-size: clamp(1.55rem, 4vw, 2.2rem); line-height: 1.15; }
+    .bars { display: grid; gap: 7px; margin-block: 12px; }
+    .bar-label { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 3px; font-size: .88rem; }
+    .bar-label strong { font-variant-numeric: tabular-nums; }
+    .bar, .bar span { display: block; border-radius: 999px; height: 7px; }
+    .bar { background: #e3ecf0; }
+    .bar span { background: #3a8593; }
+    .feedback { border-top: 1px solid var(--line); padding-top: 10px; }
+    .feedback p { margin-top: 4px; font-size: .91rem; }
+    .actions { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 11px; }
+    .action.primary { border-color: var(--teal); background: var(--teal); color: white; }
+    .action.primary:hover { background: #104653; }
+    #audit-status:not(:empty) { margin-top: 8px; font-size: .88rem; }
+    .verification {
+      border: 1px solid #c8dee4;
+      border-radius: 10px;
+      background: var(--tint);
+      padding: 11px 15px;
+      font-size: .92rem;
+    }
+    
+    .verification h3 { margin-bottom: 4px; }
+    .comparison { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 22px; margin-top: 7px; }
+    .comparison > div { padding-block: 9px; border-bottom: 1px solid var(--line); }
+    .comparison dt { font-weight: 730; }
+    .comparison dd { margin: 2px 0 0; color: var(--muted); font-size: .93rem; }
+    .course-notes p { margin-top: 9px; }
+    details { margin-top: 11px; }
+    summary { cursor: pointer; color: var(--teal); font-weight: 710; }
+    details ul { padding-left: 1.3em; margin-block: 8px 0; }
+    details li + li { margin-top: 5px; }
+    footer { padding: 16px 0; font-size: .85rem; color: #dce8f0; }
+    @media (max-width: 760px) {
+      .shell { width: calc(100% - 30px); }
+      .demo-grid { grid-template-columns: minmax(0, 1fr); }
+    }
+    @media (max-width: 470px) {
+      .choice { font-size: .83rem; }
+      .rule-sets, .comparison { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .step { font-size: .8rem; padding-inline: 5px; }
+    }
+    @media (max-width: 365px) {
+      .comparison { grid-template-columns: minmax(0, 1fr); }
+    }
+    .lab-layout { padding: 0; }
+    .pair { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .custom { margin-top: 12px; font-size: .90rem; }
+    .custom-fields { display: grid; gap: 12px; margin-top: 10px; }
+    .custom-fields legend { margin-bottom: 4px; font-size: .87rem; }
+    .custom-fields .choice { min-height: 40px; font-size: .83rem; }
+    .course-notes dl, .comparison dl { margin-block-end: 0; }
+    .course-notes details + details { margin-top: 10px; }
+    .scroll-table { overflow-x: auto; margin-top: 8px; max-width: 100%; }
+    table { border-collapse: collapse; width: 100%; text-align: left; font-size: .9rem; }
+    caption { text-align: left; padding-block: 4px; font-weight: 700; }
+    th, td { padding: 6px 9px; border-bottom: 1px solid var(--line); }
+    thead, .totals { background: var(--tint); }
+    .totals { font-weight: 710; }
+    .num { text-align: right; font-variant-numeric: tabular-nums; }
+    tr[data-used="false"] { color: var(--muted); background: var(--page); }
+    .skip-link { position: absolute; left: 8px; top: -200px; background: white; padding: 9px; }
+    .skip-link:focus { top: 8px; z-index: 4; }
+    #audit-status { color: var(--muted); }
+    .token-strip li { list-style: none; }
+    @media (max-width: 470px) {
+      .scroll-table th, .scroll-table td { padding: 5px 6px; }
+    }
+    @media print {
+      .top, .actions, .custom, #scan-controls, .skip-link { display: none; }
+      .shell { width: 100%; }
+      .hero { padding: 14px 0; }
+      .content { padding-block: 12px; }
+      .lab-layout { padding: 0; }
+      .selectors, .stages { display: none; }
+      .demo-grid { display: block; }
+      .demo-grid > .card { margin-bottom: 8px; }
+      .card, .verification, tr { break-inside: avoid; }
+      * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip To The Artifact</a>
+  <header class="top">
+    <nav class="shell nav" aria-label="Portfolio">
+      <a href="https://quiksun.github.io/AI-ML-Professional-Portfolio/index.html">Sunny | AI &amp; ML Portfolio</a>
+      <a href="https://quiksun.github.io/AI-ML-Professional-Portfolio/index.html#workshops">← Back To Portfolio Artifacts</a>
+    </nav>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <section class="hero" aria-labelledby="page-title">
+      <div class="shell">
+        <p class="course">AIML-500 · Workshop 4</p>
+        <h1 id="page-title">When “P” Means Two Things</h1>
+        <p>Two hospitals want to train a model together. Explore three fictional encounters to see how a code, a repeat report, or a late result can change what the model learns.</p>
+      </div>
+    </section>
+
+    <div class="shell content">
+      <noscript><p class="card">The raw import marks 10 of 16 resolved reports as present. With local codes and the latest report per encounter, the result is 5 of 11 resolved encounters. Open the day 7 comparison below to trace the change. Enable JavaScript to try different rules.</p></noscript>
+
+      <div id="lab" class="content lab-layout" hidden>
+        <form id="rules" class="card selectors" aria-label="Data Challenge And Audit Rules">
+          <fieldset>
+            <legend>Choose A Data Challenge</legend>
+            <div class="choices examples">
+              <label class="choice"><input type="radio" name="example" value="codes" checked>Conflicting Codes</label>
+              <label class="choice"><input type="radio" name="example" value="repeat">Repeat Reports</label>
+              <label class="choice"><input type="radio" name="example" value="late">Late Results</label>
+            </div>
+          </fieldset>
+          <blockquote class="prompt" id="prompt-text">Both Hospitals Send The Code P. Does It Always Mean The Finding Is Present?</blockquote>
+          <fieldset>
+            <legend>Choose An Audit Setup</legend>
+            <div class="choices rule-sets">
+              <label class="choice"><input type="radio" name="preset" value="raw" checked>Raw Import</label>
+              <label class="choice"><input type="radio" name="preset" value="mapped">Site-Specific Codes</label>
+              <label class="choice"><input type="radio" name="preset" value="aligned">Latest Per Encounter</label>
+              <label class="choice"><input type="radio" name="preset" value="early">Day 1 Snapshot</label>
+            </div>
+          </fieldset>
+        </form>
+
+        <div class="demo-grid">
+          <section class="card" aria-labelledby="example-title">
+            <h2 id="example-title">Lakeside · Encounter L01</h2>
+            <p class="muted" id="example-intro"></p>
+            <div class="stages" role="group" aria-label="Walkthrough Step">
+              <button class="step" type="button" data-step="0" aria-pressed="true">Read The Reports</button>
+              <button class="step" type="button" data-step="1" aria-pressed="false">Apply The Rules</button>
+              <button class="step" type="button" data-step="2" aria-pressed="false">Check The Label</button>
+            </div>
+            <div class="stage">
+              <h3 id="stage-title"></h3>
+              <p id="stage-text"></p>
+              <ul class="token-strip" id="record-strip" aria-label="Reports For The Selected Encounter"></ul>
+              <div id="scan-controls">
+                <label class="scan-label" for="scan-position">Inspect Report <output id="scan-count" for="scan-position">1 Of 2</output></label>
+                <input type="range" id="scan-position" min="1" max="2" value="1" step="1">
+              </div>
+              <p class="footnote" id="stage-detail"></p>
+            </div>
+          </section>
+
+          <section class="card" aria-labelledby="audit-heading">
+            <h2 id="audit-heading">Audit Result</h2>
+            <div class="output"><span>Share Marked Present Across Both Hospitals</span><strong id="rate">62.5%</strong></div>
+            <p class="footnote" id="fraction">10 Of 16 Resolved Report Rows</p>
+            <div class="bars" role="group" aria-label="Distribution Across All Counted Units">
+              <div><div class="bar-label"><span>Present</span><strong id="n-present">10 Of 18</strong></div><span class="bar" aria-hidden="true"><span id="bar-present"></span></span></div>
+              <div><div class="bar-label"><span>Ruled Out</span><strong id="n-absent">6 Of 18</strong></div><span class="bar" aria-hidden="true"><span id="bar-absent"></span></span></div>
+              <div><div class="bar-label"><span>Pending</span><strong id="n-pending">2 Of 18</strong></div><span class="bar" aria-hidden="true"><span id="bar-pending"></span></span></div>
+            </div>
+            <p class="footnote">The headline divides present by resolved units. The bars show all counted units, including pending ones.</p>
+            <div class="feedback">
+              <h3 id="advice-title">Resolve The Code Conflict First.</h3>
+              <p id="advice-body"></p>
+              <div class="actions">
+                <button class="action primary" type="button" id="align">Apply Aligned Rules</button>
+                <button class="action secondary" type="button" id="reset">Reset To Raw Import</button>
+              </div>
+              <p id="audit-status" role="status" aria-atomic="true"></p>
+            </div>
+            <details class="custom">
+              <summary>Adjust Individual Rules</summary>
+              <div class="custom-fields">
+                <fieldset><legend>Code Dictionary</legend><div class="choices pair">
+                  <label class="choice"><input type="radio" form="rules" name="mapping" value="shared" checked>Shared Lookup</label>
+                  <label class="choice"><input type="radio" form="rules" name="mapping" value="local">Site-Specific</label>
+                </div></fieldset>
+                <fieldset><legend>Counting Unit</legend><div class="choices pair">
+                  <label class="choice"><input type="radio" form="rules" name="unit" value="report" checked>Every Report</label>
+                  <label class="choice"><input type="radio" form="rules" name="unit" value="encounter">Latest Per Encounter</label>
+                </div></fieldset>
+                <fieldset><legend>Data Available Through</legend><div class="choices pair">
+                  <label class="choice"><input type="radio" form="rules" name="cutoff" value="1">Day 1</label>
+                  <label class="choice"><input type="radio" form="rules" name="cutoff" value="7" checked>Day 7</label>
+                </div></fieldset>
+              </div>
+            </details>
+          </section>
+        </div>
+
+        <aside class="verification" aria-labelledby="verification-title">
+          <h3 id="verification-title">Verify The Local Definition</h3><p id="verification-text"></p>
+        </aside>
+      </div>
+
+      <section class="card course-notes" aria-labelledby="comparison-title">
+        <h2 id="comparison-title">What The Five Vs Reveal About The Data</h2>
+        <dl class="comparison">
+          <div><dt>Volume</dt><dd>The feeds contain 18 reports about 12 encounters. A repeated or revised report can give one encounter extra weight.</dd></div>
+          <div><dt>Velocity</dt><dd>With site-specific codes and one status per encounter, 6 of 12 labels are resolved on day 1. By day 7, 11 are resolved.</dd></div>
+          <div><dt>Variety</dt><dd>Riverbend sends table rows and Lakeside sends nested JSON. Both feeds can supply an encounter ID, receipt day and local status code.</dd></div>
+          <div><dt>Veracity</dt><dd>Riverbend uses P for present. Lakeside uses it for pending. A data steward at each site can check the mapping against its source records.</dd></div>
+          <div><dt>Value</dt><dd>The aligned count gives the project lead 11 candidate labels to audit and one unresolved outcome to investigate before funding model training.</dd></div>
+        </dl>
+        <p>The training target is <strong>one resolved status per encounter through day 7</strong>. In the proposed collaboration, each hospital would check its labels locally and review which summaries it can share. A later pilot could test each hospital’s model on the other site’s held-out cases.</p>
+
+        <details id="comparison">
+          <summary>Compare One Rule Change At A Time</summary>
+          <div class="scroll-table" role="region" aria-label="Day 7 Comparison" tabindex="0">
+            <table><caption>The Same 18 Reports At Day 7</caption>
+              <thead><tr><th scope="col">Audit Setup</th><th scope="col">Unit</th><th scope="col" class="num">Present / Resolved</th><th scope="col" class="num">Share</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Shared Lookup, All Reports</th><td>Report</td><td class="num">10 / 16</td><td class="num">62.5%</td></tr>
+                <tr><th scope="row">Site-Specific Codes, All Reports</th><td>Report</td><td class="num">6 / 12</td><td class="num">50.0%</td></tr>
+                <tr><th scope="row">Site-Specific Codes, Latest Report</th><td>Encounter</td><td class="num">5 / 11</td><td class="num">45.5%</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="footnote">Correcting the dictionary moves four Lakeside P reports to pending. Counting each encounter once removes a repeated positive report from the resolved count.</p>
+        </details>
+        <details id="evidence" hidden>
+          <summary>Inspect Hospital Counts And The 18 Source Reports</summary>
+          <p class="footnote" id="evidence-rules"></p>
+          <div class="scroll-table" role="region" aria-label="Hospital Count Totals" tabindex="0">
+            <table><caption>What Each Hospital Contributes</caption>
+              <thead><tr><th scope="col">Site</th><th scope="col" class="num">Reports Received</th><th scope="col" class="num">Units Counted</th><th scope="col" class="num">Present</th><th scope="col" class="num">Ruled Out</th><th scope="col" class="num">Pending</th></tr></thead>
+              <tbody id="site-rows"></tbody>
+            </table>
+          </div>
+          <p class="footnote"><strong>Local Dictionaries.</strong> Riverbend uses P for present, N for ruled out and U for pending. Lakeside uses C for confirmed present, N for ruled out and P for pending. The shared lookup maps both P and C to present.</p>
+          <div class="scroll-table" role="region" aria-label="Report History" tabindex="0">
+            <table><caption>Source Reports Under The Selected Rules</caption>
+              <thead><tr><th scope="col">Site</th><th scope="col">Encounter</th><th scope="col">Received</th><th scope="col">Code</th><th scope="col">Treatment</th></tr></thead>
+              <tbody id="ledger-rows"></tbody>
+            </table>
+          </div>
+        </details>
+        <details id="notes">
+          <summary>Portfolio Entry</summary>
+          <dl class="comparison">
+            <div><dt>Introduction And Objective</dt><dd>Determine whether the same outcome can be measured consistently at two hospitals before training a shared model.</dd></div>
+            <div><dt>Description And Process</dt><dd>I adapted the 4.3 hospital case into three record-level questions. Each walkthrough traces a source report, applies a rule, and checks the resulting label.</dd></div>
+            <div><dt>Tools And Technologies</dt><dd>ChatGPT assisted with the adaptation. The HTML and JavaScript demonstration reads fictional tabular and JSON data and calculates the counts in the browser.</dd></div>
+            <div><dt>Value Proposition</dt><dd>A project lead can identify a definition or timing decision that needs an owner. An analyst can trace the headline percentage back to an individual report.</dd></div>
+            <div><dt>Unique Value And Relevance</dt><dd>Two teams can use the same field name and still measure different things. Showing a specific record helps business analysts resolve that disagreement with the people who own the data.</dd></div>
+          </dl>
+        </details>
+        <details>
+          <summary>Course Connection And References</summary>
+          <p>The five Vs, data consistency, duplicate records, missing values and quality monitoring connect to <strong>4.2 Data Challenges In Machine Learning</strong>. Here a pending outcome stays unresolved until a later report confirms it. A useful monitoring check is the share still pending at day 7 at each site.</p>
+          <p>Riverbend and Lakeside come from <strong>4.3 Data Challenge Scenarios</strong>, scenario 3 on data sharing and governance. I proposed aligning definitions and testing locally. The codes, encounters, dates and seven-day target are fictional examples created for this artifact.</p>
+          <ul>
+            <li><a href="https://www.youtube.com/watch?v=bAyrObl7TYE">Simplilearn · Big Data In 5 Minutes</a></li>
+            <li><a href="https://www.ibm.com/think/topics/big-data">IBM · What Is Big Data?</a></li>
+          </ul>
+        </details>
+      </section>
+    </div>
+  </main>
+  <footer><div class="shell">Sunny · AIML-500 Machine Learning Fundamentals · Professional Portfolio Artifact 4</div></footer>
+
+  <script>
+    (() => {
+      "use strict";
+      const riverbendCsv = [
+        "encounter,received_day,result_code",
+        "R01,1,P","R02,1,N","R03,1,U","R03,3,P","R04,1,N",
+        "R05,1,P","R05,2,P","R06,1,U","R06,5,N"
+      ].join("\n");
+      const lakesideJson = [
+        {visit:"L01",receivedDay:1,report:{status:"P"}},
+        {visit:"L01",receivedDay:3,report:{status:"N"}},
+        {visit:"L02",receivedDay:1,report:{status:"C"}},
+        {visit:"L03",receivedDay:1,report:{status:"P"}},
+        {visit:"L03",receivedDay:4,report:{status:"C"}},
+        {visit:"L04",receivedDay:1,report:{status:"N"}},
+        {visit:"L05",receivedDay:1,report:{status:"P"}},
+        {visit:"L05",receivedDay:6,report:{status:"N"}},
+        {visit:"L06",receivedDay:1,report:{status:"P"}}
+      ];
+      const reports = riverbendCsv.split("\n").slice(1).map(line => {
+        const [id, day, code] = line.split(",");
+        return {site:"Riverbend", id, day:Number(day), code};
+      }).concat(lakesideJson.map(item => ({
+        site:"Lakeside", id:item.visit, day:item.receivedDay, code:item.report.status
+      })));
+      const dictionaries = {
+        shared: {P:"present",C:"present",N:"absent",U:"pending"},
+        Riverbend: {P:"present",N:"absent",U:"pending"},
+        Lakeside: {P:"pending",C:"present",N:"absent"}
+      };
+      const outcome = {present:"Present",absent:"Ruled Out",pending:"Pending"};
+      const el = id => document.getElementById(id);
+      const form = el("rules");
+      const fresh = () => ({received:0, counted:0, present:0, absent:0, pending:0});
+      const encounterKey = record => record.site + "/" + record.id;
+
+      function calculate(rules) {
+        const sites = {Riverbend:fresh(), Lakeside:fresh()};
+        const latest = new Map();
+        for (const record of reports) {
+          if (record.day > rules.cutoff) continue;
+          sites[record.site].received++;
+          const key = encounterKey(record);
+          const earlier = latest.get(key);
+          if (!earlier || record.day > earlier.day) latest.set(key, record);
+        }
+        const ledger = reports.map(record => {
+          if (record.day > rules.cutoff) return {record, used:false, treatment:"After Cutoff"};
+          if (rules.unit === "encounter" && latest.get(encounterKey(record)) !== record) {
+            return {record, used:false, treatment:"Superseded"};
+          }
+          const dictionary = dictionaries[rules.mapping === "shared" ? "shared" : record.site];
+          const state = dictionary[record.code];
+          const counts = sites[record.site];
+          counts.counted++;
+          counts[state]++;
+          return {record, used:true, treatment:outcome[state]};
+        });
+        const total = fresh();
+        for (const site of Object.values(sites)) {
+          for (const name of Object.keys(total)) total[name] += site[name];
+        }
+        return {sites, total, ledger};
+      }
+
+      function decision(rules, total) {
+        if (rules.mapping === "shared") {
+          return ["Resolve The Code Conflict First.", "The shared lookup treats Lakeside’s P as a confirmed finding. Its local dictionary calls that status pending. Compare the two dictionaries before accepting these labels."];
+        }
+        if (rules.unit === "report") {
+          return ["Give Each Encounter One Training Label.", rules.cutoff === 1
+            ? "Each encounter has sent one report so far. Later revisions will give some encounters extra weight under this counting rule."
+            : "The two feeds contain 18 reports about 12 encounters. A revision or repeat can give one case extra weight. Keep the latest status for each encounter."];
+        }
+        if (rules.cutoff === 1) {
+          return ["Wait For The Agreed Reporting Window.", total.pending + " of 12 encounters still have pending labels on day 1. Examine the seven-day snapshot before selecting training examples."];
+        }
+        return ["Proceed To A Local Label Audit.", "Eleven of 12 encounters have resolved labels at day 7. Keep the pending case out of supervised training, ask why its result is missing, and verify a sample of labels at each site."];
+      }
+
+      function makeRow(values, headerFirst, numeric, className) {
+        const row = document.createElement("tr");
+        if (className) row.className = className;
+        values.forEach((value, index) => {
+          const isHeader = headerFirst && index === 0;
+          const cell = document.createElement(isHeader ? "th" : "td");
+          if (isHeader) cell.scope = "row";
+          if (numeric && index > 0) cell.className = "num";
+          cell.textContent = value;
+          row.append(cell);
+        });
+        return row;
+      }
+
+      const examples = {
+        codes: {
+          id: "L01", site: "Lakeside",
+          question: "Both Hospitals Send The Code P. Does It Always Mean The Finding Is Present?",
+          intro: "A day 1 report says P. Two days later, Lakeside sends N for the same encounter.",
+          read: "Read the status using the hospital’s own codebook. Move the slider to inspect the next report.",
+          apply: "Compare each report’s local meaning with its treatment under the selected rules. The shared lookup turns Lakeside’s pending result into a positive example.",
+          checkTitle: "Verify The Local Definition",
+          check: "Lakeside’s P means pending. Riverbend’s P means present. Ask both data stewards to confirm the mapping before accepting a common training label."
+        },
+        repeat: {
+          id: "R05", site: "Riverbend",
+          question: "Riverbend Sends P Twice For The Same Encounter. How Many Training Examples Should It Contribute?",
+          intro: "A positive result arrives on day 1 and appears again on day 2 under the same encounter ID.",
+          read: "Look at the encounter ID, dates and result codes. The second message reissues the first finding.",
+          apply: "With every report counted, a repeated confirmation can give this encounter a second vote. Switch to the latest report per encounter to inspect the difference.",
+          checkTitle: "Verify The Counting Unit",
+          check: "For a target defined per encounter, group the messages by hospital and encounter ID. The repeat report remains useful for tracing the history."
+        },
+        late: {
+          id: "R03", site: "Riverbend",
+          question: "An Encounter Is Pending On Day 1 And Confirmed On Day 3. What Label Is Available At Each Cutoff?",
+          intro: "Riverbend initially records U for pending. A day 3 update confirms that the finding is present.",
+          read: "Inspect when each status was received. The walkthrough shows the full history so you can see which updates fall after an early cutoff.",
+          apply: "At the day 1 cutoff, the day 3 confirmation is still in the future. Compare the day 1 snapshot with the latest report through day 7.",
+          checkTitle: "Verify The Observation Window",
+          check: "Allow the agreed seven-day window to close before assigning the final target. Keep unresolved outcomes visible so the team can investigate which labels are still missing."
+        }
+      };
+      const presets = {
+        raw: {mapping:"shared", unit:"report", cutoff:7},
+        mapped: {mapping:"local", unit:"report", cutoff:7},
+        aligned: {mapping:"local", unit:"encounter", cutoff:7},
+        early: {mapping:"local", unit:"encounter", cutoff:1}
+      };
+      const steps = Array.from(document.querySelectorAll("[data-step]"));
+      const scan = el("scan-position");
+      let step = 0;
+
+      function readRules() {
+        return {
+          mapping: form.elements.mapping.value,
+          unit: form.elements.unit.value,
+          cutoff: Number(form.elements.cutoff.value)
+        };
+      }
+
+      function describeRules(rules) {
+        const mapping = rules.mapping === "local" ? "Site-Specific Codes" : "Shared Lookup";
+        const unit = rules.unit === "encounter" ? "Latest Report Per Encounter" : "Every Report";
+        return mapping + " · " + unit + " · Day " + rules.cutoff;
+      }
+
+      function applyPreset(key) {
+        const rules = presets[key];
+        form.elements.mapping.value = rules.mapping;
+        form.elements.unit.value = rules.unit;
+        form.elements.cutoff.value = String(rules.cutoff);
+        render();
+      }
+
+      function renderWalkthrough(rules = readRules(), result = calculate(rules)) {
+        const example = examples[form.elements.example.value];
+        const rows = result.ledger
+          .filter(({record}) => record.id === example.id && record.site === example.site)
+          .sort((first, second) => first.record.day - second.record.day);
+        el("prompt-text").textContent = example.question;
+        el("example-title").textContent = example.site + " · Encounter " + example.id;
+        el("example-intro").textContent = example.intro;
+        el("verification-title").textContent = example.checkTitle;
+        el("verification-text").textContent = example.check;
+        for (const [i, button] of steps.entries()) button.setAttribute("aria-pressed", String(i === step));
+        scan.max = String(rows.length);
+        const inspected = Math.min(Number(scan.value), rows.length) - 1;
+        el("scan-count").textContent = (inspected + 1) + " Of " + rows.length;
+        el("scan-controls").hidden = step !== 0 || rows.length < 2;
+        const chips = rows.map(({record, used, treatment}, i) => {
+          const chip = document.createElement("li");
+          const local = outcome[dictionaries[record.site][record.code]];
+          chip.textContent = "Day " + record.day + " · " + record.code + " · " + (step === 0 ? local : treatment);
+          chip.classList.toggle("emphasis", step === 0 ? i === inspected : used);
+          return chip;
+        });
+        el("record-strip").replaceChildren(...chips);
+
+        const title = el("stage-title"), text = el("stage-text"), detail = el("stage-detail");
+        if (step === 0) {
+          title.textContent = "Read The Source Record";
+          text.textContent = example.read;
+          const {record} = rows[inspected];
+          const local = outcome[dictionaries[record.site][record.code]].toLowerCase();
+          detail.textContent = "Day " + record.day + " · " + record.site + " uses " + record.code +
+            " for “" + local + ".” " + (record.day <= rules.cutoff
+              ? "This report is available at the selected cutoff."
+              : "This report arrives after the selected cutoff.");
+        } else if (step === 1) {
+          title.textContent = "Trace The Effect Of The Rules";
+          text.textContent = example.apply;
+          detail.textContent = "Current Rules · " + describeRules(rules);
+        } else {
+          title.textContent = "Which Labels Would Enter Training?";
+          const retained = rows.filter(row => row.used);
+          const resolved = retained.filter(row => row.treatment !== "Pending");
+          const present = resolved.filter(row => row.treatment === "Present").length;
+          const pending = retained.length - resolved.length;
+          text.textContent = example.id + " contributes " + resolved.length +
+            (resolved.length === 1 ? " resolved training label" : " resolved training labels") +
+            " under these rules. The audit counts " + present + " as present, " +
+            (resolved.length - present) + " as ruled out and " + pending + " as pending.";
+          const final = rows.at(-1).record;
+          const aligned = outcome[dictionaries[example.site][final.code]].toLowerCase();
+          detail.textContent = "Using site codes and the latest report through day 7, the encounter-level status for " +
+            example.id + " is “" + aligned + ".”";
+        }
+      }
+
+      function render() {
+        const rules = readRules();
+        const result = calculate(rules);
+        const t = result.total;
+        const resolved = t.present + t.absent;
+        const percent = resolved ? (100 * t.present / resolved).toFixed(1) + "%" : "—";
+        const unit = rules.unit === "encounter" ? "Encounters" : "Report Rows";
+        el("rate").textContent = percent;
+        el("fraction").textContent = t.present + " Of " + resolved + " Resolved " + unit;
+        for (const state of Object.keys(outcome)) {
+          el("n-" + state).textContent = t[state] + " Of " + t.counted;
+          el("bar-" + state).style.width = (t.counted ? 100 * t[state] / t.counted : 0) + "%";
+        }
+        for (const radio of form.elements.preset) {
+          const preset = presets[radio.value];
+          radio.checked = preset.mapping === rules.mapping && preset.unit === rules.unit && preset.cutoff === rules.cutoff;
+        }
+        const [title, body] = decision(rules, t);
+        el("advice-title").textContent = title;
+        el("advice-body").textContent = body;
+        const description = describeRules(rules);
+        el("evidence-rules").textContent = description;
+        el("audit-status").textContent = description;
+        el("audit-status").setAttribute("aria-label", description + ". " + el("fraction").textContent + ", " + percent + ".");
+        const siteRows = Object.entries({...result.sites, Combined:t}).map(([name, counts]) =>
+          makeRow([name, counts.received, counts.counted, counts.present, counts.absent, counts.pending],
+            true, true, name === "Combined" ? "totals" : ""));
+        el("site-rows").replaceChildren(...siteRows);
+        el("ledger-rows").replaceChildren(...result.ledger.map(({record, used, treatment}) => {
+          const row = makeRow([record.site, record.id, "Day " + record.day, record.code, treatment], false, false);
+          row.dataset.used = String(used);
+          return row;
+        }));
+        renderWalkthrough(rules, result);
+      }
+
+      for (const radio of form.elements.example) {
+        radio.addEventListener("change", () => {
+          step = 0;
+          scan.value = "1";
+          renderWalkthrough();
+        });
+      }
+      for (const radio of form.elements.preset) radio.addEventListener("change", () => applyPreset(radio.value));
+      for (const name of ["mapping","unit","cutoff"]) {
+        for (const radio of form.elements[name]) radio.addEventListener("change", render);
+      }
+      for (const button of steps) {
+        button.addEventListener("click", () => {
+          step = Number(button.dataset.step);
+          renderWalkthrough();
+        });
+      }
+      scan.addEventListener("input", () => renderWalkthrough());
+      el("align").addEventListener("click", () => applyPreset("aligned"));
+      el("reset").addEventListener("click", () => applyPreset("raw"));
+      render();
+      el("evidence").hidden = false;
+      el("lab").hidden = false;
+    })();
+  </script>
+</body>
+</html>
