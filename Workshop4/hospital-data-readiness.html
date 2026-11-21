@@ -272,7 +272,7 @@
               <label class="choice"><input type="radio" name="example" value="late">Late Results</label>
             </div>
           </fieldset>
-          <blockquote class="prompt" id="prompt-text">Both Hospitals Send The Code P. Does It Always Mean The Finding Is Present?</blockquote>
+          <blockquote class="prompt" id="prompt-text">Both hospitals send the code P. Does it always mean the finding is present?</blockquote>
           <fieldset>
             <legend>Choose An Audit Setup</legend>
             <div class="choices rule-sets">
@@ -307,7 +307,7 @@
 
           <section class="card" aria-labelledby="audit-heading">
             <h2 id="audit-heading">Audit Result</h2>
-            <div class="output"><span>Share Marked Present Across Both Hospitals</span><strong id="rate">62.5%</strong></div>
+            <div class="output"><span>Share marked present across both hospitals</span><strong id="rate">62.5%</strong></div>
             <p class="footnote" id="fraction">10 Of 16 Resolved Report Rows</p>
             <div class="bars" role="group" aria-label="Distribution Across All Counted Units">
               <div><div class="bar-label"><span>Present</span><strong id="n-present">10 Of 18</strong></div><span class="bar" aria-hidden="true"><span id="bar-present"></span></span></div>
@@ -521,7 +521,7 @@
         },
         repeat: {
           id: "R05", site: "Riverbend",
-          question: "Riverbend Sends P Twice For The Same Encounter. How Many Training Examples Should It Contribute?",
+          question: "Riverbend sends P twice for the same Encounter. How many training examples should it Contribute? ",
           intro: "A positive result arrives on day 1 and appears again on day 2 under the same encounter ID.",
           read: "Look at the encounter ID, dates and result codes. The second message reissues the first finding.",
           apply: "With every report counted, a repeated confirmation can give this encounter a second vote. Switch to the latest report per encounter to inspect the difference.",
@@ -530,7 +530,7 @@
         },
         late: {
           id: "R03", site: "Riverbend",
-          question: "An Encounter Is Pending On Day 1 And Confirmed On Day 3. What Label Is Available At Each Cutoff?",
+          question: "An encounter is pending on Day 1 and confirmed on day 3. What label is available at each cutoff?",
           intro: "Riverbend initially records U for pending. A day 3 update confirms that the finding is present.",
           read: "Inspect when each status was received. The walkthrough shows the full history so you can see which updates fall after an early cutoff.",
           apply: "At the day 1 cutoff, the day 3 confirmation is still in the future. Compare the day 1 snapshot with the latest report through day 7.",
